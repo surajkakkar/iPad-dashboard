@@ -4,289 +4,394 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Home Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@500;700;900&family=Press+Start+2P&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Figtree:wght@300;400;500;600;700&family=Press+Start+2P&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#07090d;
-  --surface:#0e1117;
-  --surface2:#131920;
-  --border:#1c2535;
-  --border2:#243044;
-  --amber:#f5a623;
-  --amber2:#7a4e0d;
-  --cyan:#00d4ff;
-  --cyan2:#004d5e;
-  --green:#00e676;
-  --green2:#003d1f;
-  --orange:#ff6d00;
-  --red:#ff1744;
-  --txt:#dde3ee;
-  --txt2:#5a6a82;
-  --txt3:#2e3d52;
+  --bg:#eeeae3;
+  --surface:#ffffff;
+  --surface2:#f7f5f1;
+  --surface3:#f0ede7;
+  --border:#ddd8cf;
+  --border2:#c9c3b8;
+  --txt:#18160f;
+  --txt2:#6b6457;
+  --txt3:#a49d92;
+  --txt4:#c8c1b5;
+  --accent:#18160f;
+  --blue:#1e3a6e;
+  --blue-bg:#eef2f9;
+  --rose:#8b2635;
+  --rose-bg:#f9edef;
+  --green:#1a5c35;
+  --green-bg:#eaf4ef;
+  --amber:#8a6200;
+  --amber-bg:#fdf6e3;
+  --orange-line:#e07800;
+  --silver-line:#7a8490;
+  --radius:12px;
+  --gap:10px;
   --mono:'Share Tech Mono',monospace;
-  --display:'Orbitron',monospace;
   --pixel:'Press Start 2P',monospace;
-  --body:'Inter',sans-serif;
-  --ga:0 0 8px rgba(245,166,35,0.5),0 0 24px rgba(245,166,35,0.2);
-  --gc:0 0 8px rgba(0,212,255,0.4),0 0 24px rgba(0,212,255,0.15);
-  --gg:0 0 8px rgba(0,230,118,0.5),0 0 24px rgba(0,230,118,0.2);
+  --body:'Figtree',sans-serif;
+  --serif:'DM Serif Display',serif;
+  --shadow:0 1px 2px rgba(0,0,0,0.05),0 4px 12px rgba(0,0,0,0.06);
+  --shadow-sm:0 1px 2px rgba(0,0,0,0.05),0 2px 6px rgba(0,0,0,0.04);
 }
 
-html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:var(--body)}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:var(--body);-webkit-font-smoothing:antialiased}
 
-/* subtle dot grid bg */
+/* Very subtle warm grain */
 body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:radial-gradient(circle,rgba(0,212,255,0.04) 1px,transparent 1px);
-  background-size:28px 28px}
+  background-image:radial-gradient(circle at 10% 90%,rgba(30,58,110,0.04) 0%,transparent 50%),
+  radial-gradient(circle at 90% 10%,rgba(139,38,53,0.03) 0%,transparent 50%)}
 
-.dash{position:relative;z-index:1;display:grid;width:100vw;height:100vh;
-  grid-template-rows:auto 1fr;gap:10px;padding:12px}
+.dash{
+  position:relative;z-index:1;
+  display:grid;width:100vw;height:100vh;
+  grid-template-rows:auto 1fr auto;
+  gap:var(--gap);padding:12px;
+}
 
-/* ── TOP BAR ─────────────────────────────────────── */
-.topbar{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:stretch}
+/* ─── ROW 1: CLOCK + WEATHER ─── */
+.topbar{display:grid;grid-template-columns:auto 1fr;gap:var(--gap);align-items:stretch}
 
-/* CLOCK CARD */
+/* ─── CLOCK ─── */
 .clock-card{
-  background:var(--surface);border:1px solid var(--border2);border-radius:8px;
-  padding:16px 24px;display:flex;flex-direction:column;justify-content:center;
-  position:relative;overflow:hidden;min-width:300px;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px 28px;display:flex;flex-direction:column;justify-content:center;
+  min-width:260px;box-shadow:var(--shadow);position:relative;overflow:hidden;
 }
-.clock-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--amber),transparent);opacity:0.6}
-.clock-label{font-family:var(--mono);font-size:9px;letter-spacing:0.25em;color:var(--txt2);margin-bottom:8px}
-.clock-time{font-family:var(--display);font-size:clamp(44px,5vw,66px);font-weight:700;
-  color:var(--amber);text-shadow:var(--ga);letter-spacing:0.04em;line-height:1}
-.clock-date{font-family:var(--mono);font-size:11px;letter-spacing:0.15em;color:var(--txt2);margin-top:6px}
+.clock-card::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--accent);border-radius:var(--radius) 0 0 var(--radius)}
+.clock-eyebrow{font-size:9px;font-weight:600;letter-spacing:0.2em;color:var(--txt3);text-transform:uppercase;margin-bottom:5px}
+.clock-time{font-family:var(--serif);font-size:clamp(50px,5.5vw,70px);line-height:1;color:var(--txt)}
+.clock-time .ampm{font-family:var(--body);font-size:0.35em;font-weight:400;color:var(--txt3);vertical-align:middle;margin-left:4px;letter-spacing:0.05em}
+.clock-colon{animation:blinkColon 1s step-end infinite}
+@keyframes blinkColon{0%,100%{opacity:1}50%{opacity:0.15}}
+.clock-date{font-size:12px;color:var(--txt2);margin-top:7px;letter-spacing:0.02em}
 
-/* WEATHER CARD */
+/* ─── WEATHER ─── */
 .weather-card{
-  background:var(--surface);border:1px solid var(--border2);border-radius:8px;
-  padding:16px 20px;display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;
-  position:relative;overflow:hidden;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px 22px;display:grid;grid-template-columns:auto 1px 1fr 1px auto;
+  gap:18px;align-items:center;box-shadow:var(--shadow);
 }
-.weather-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0.4}
+.vdiv{width:1px;height:50%;background:var(--border);align-self:center}
+.w-main{display:flex;flex-direction:column;align-items:center;gap:2px}
+.w-icon{font-size:38px;line-height:1}
+.w-temp{font-family:var(--serif);font-size:36px;color:var(--txt);line-height:1.1}
+.w-cond{font-size:10px;font-weight:600;color:var(--txt3);letter-spacing:0.1em;text-transform:uppercase;margin-top:2px}
+.w-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px 22px}
+.ws{display:flex;flex-direction:column;gap:1px}
+.ws-lbl{font-size:8px;font-weight:600;letter-spacing:0.16em;color:var(--txt4);text-transform:uppercase}
+.ws-val{font-family:var(--mono);font-size:15px;color:var(--txt);margin-top:1px}
+.w-hourly{display:flex;flex-direction:column;gap:5px}
+.wh-title{font-size:8px;font-weight:600;letter-spacing:0.16em;color:var(--txt4);text-transform:uppercase;margin-bottom:5px}
+.hourly-row{display:flex;gap:5px}
+.hb{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:44px;padding:6px 3px;
+  border-radius:8px;background:var(--surface2);border:1px solid var(--border);transition:border-color 0.15s}
+.hb:hover{border-color:var(--border2)}
+.hb.now{background:var(--accent);border-color:var(--accent)}
+.hb.now .hb-lbl,.hb.now .hb-tmp,.hb.now .hb-pct{color:rgba(255,255,255,0.8)}
+.hb-lbl{font-size:8px;font-weight:600;color:var(--txt3)}
+.hb-ico{font-size:13px}
+.hb-tmp{font-family:var(--mono);font-size:10px;color:var(--txt)}
+.hb-pct{font-size:8px;color:var(--blue);font-weight:500}
 
-.w-now{display:flex;flex-direction:column;align-items:center;gap:4px}
-.w-icon{font-size:42px;line-height:1}
-.w-temp{font-family:var(--display);font-size:34px;font-weight:700;color:var(--cyan);text-shadow:var(--gc);line-height:1}
-.w-desc{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;color:var(--txt2);text-transform:uppercase;margin-top:2px}
-
-.w-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px}
-.wstat{display:flex;flex-direction:column;gap:1px}
-.wstat-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.18em;color:var(--txt3);text-transform:uppercase}
-.wstat-val{font-family:var(--mono);font-size:14px;color:var(--txt)}
-
-.w-hourly{display:flex;flex-direction:column;gap:4px;justify-content:center}
-.w-hourly-title{font-family:var(--mono);font-size:8px;letter-spacing:0.2em;color:var(--txt3);margin-bottom:4px}
-.hourly-row{display:flex;gap:6px}
-.hblock{display:flex;flex-direction:column;align-items:center;gap:2px;
-  min-width:44px;padding:5px 3px;border-radius:5px;
-  background:rgba(255,255,255,0.03);border:1px solid transparent;transition:border-color 0.2s}
-.hblock.now{border-color:var(--amber2);background:rgba(245,166,35,0.07)}
-.hlbl{font-family:var(--mono);font-size:8px;color:var(--txt2)}
-.hico{font-size:14px}
-.htmp{font-family:var(--mono);font-size:11px;color:var(--txt)}
-.hpct{font-family:var(--mono);font-size:8px;color:var(--cyan)}
-
-/* ── METRO BOARD ─────────────────────────────────── */
+/* ─── ROW 2: METRO ─── */
 .metro-wrap{
-  background:var(--surface);border:1px solid var(--border2);border-radius:8px;
-  display:flex;flex-direction:column;overflow:hidden;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow);
 }
 
-/* Header bar — mimics real station signage */
-.metro-header{
-  background:#000;padding:10px 16px;
+/* Station banner — clean dark bar, not garish */
+.metro-banner{
+  background:var(--accent);padding:10px 18px;
   display:flex;align-items:center;justify-content:space-between;
-  border-bottom:3px solid #111;
+  border-radius:var(--radius) var(--radius) 0 0;
 }
-.metro-header-left{display:flex;align-items:center;gap:12px}
-.wmata-logo{display:flex;align-items:center;gap:8px}
-.wmata-hex{width:28px;height:28px;background:#00529b;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center}
-.wmata-m{font-family:var(--pixel);font-size:8px;color:#fff}
-.metro-station-name{font-family:var(--pixel);font-size:11px;color:#fff;letter-spacing:0.05em}
+.metro-banner-left{display:flex;align-items:center;gap:12px}
+.wmata-hex{width:26px;height:26px;background:#00529b;
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;align-items:center;justify-content:center}
+.wmata-m{font-family:var(--pixel);font-size:7px;color:#fff}
+.metro-stn{font-family:var(--pixel);font-size:9px;color:#fff;letter-spacing:0.07em}
 .metro-lines{display:flex;gap:5px}
-.line-pill{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--pixel);font-size:6px;font-weight:700;color:#fff}
-.lOR{background:#ED8B00}.lSV{background:#919D9D;color:#111}.lBL{background:#009CDE}.lGR{background:#00B140}.lRD{background:#BF0000}.lYL{background:#FFD100;color:#222}
-.metro-clock{font-family:var(--pixel);font-size:10px;color:#fff;letter-spacing:0.1em}
+.lpill{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--pixel);font-size:5px;color:#fff;border:2px solid rgba(255,255,255,0.25)}
+.lOR{background:#ED8B00}.lSV{background:#919D9D;color:#222}
+.lBL{background:#009CDE}.lGR{background:#00B140}.lRD{background:#BF0000}.lYL{background:#FFD100;color:#222}
 
-/* Two-column split board */
-.metro-columns{display:grid;grid-template-columns:1fr 1fr;flex:1;min-height:0}
+.metro-banner-right{display:flex;align-items:center;gap:10px}
+.status-pip{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pipBreath 2.5s ease-in-out infinite}
+@keyframes pipBreath{0%,100%{opacity:1}50%{opacity:0.3}}
+.metro-clock{font-family:var(--pixel);font-size:10px;color:rgba(255,255,255,0.85);letter-spacing:0.1em}
+
+/* Two-column board */
+.metro-body{display:grid;grid-template-columns:1fr 1fr;flex:1;min-height:0}
 .metro-col{display:flex;flex-direction:column;overflow:hidden}
-.metro-col:first-child{border-right:2px solid #111}
+.metro-col:first-child{border-right:1px solid var(--border)}
 
-/* Direction header — pixel font, colored bar */
-.dir-header{
-  background:#0a0a0a;padding:8px 14px;
-  display:flex;align-items:center;justify-content:space-between;
-  border-bottom:2px solid #111;
+.dir-bar{
+  background:var(--surface3);padding:8px 16px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:baseline;gap:8px;
 }
-.dir-label{font-family:var(--pixel);font-size:7px;letter-spacing:0.05em;color:#aaa}
-.dir-arrow{font-family:var(--pixel);font-size:10px}
-.dir-toward{font-family:var(--pixel);font-size:6px;color:#666;letter-spacing:0.03em}
+.dir-name{font-size:10px;font-weight:700;color:var(--txt);letter-spacing:0.04em;text-transform:uppercase}
+.dir-sub{font-size:9px;color:var(--txt3);font-weight:400;letter-spacing:0.02em}
 
-/* Column sub-header row */
-.col-subhdr{
-  background:#050505;padding:4px 14px;
-  display:grid;grid-template-columns:1fr auto auto;gap:8px;
-  border-bottom:1px solid #111;
+.col-hdr{
+  background:var(--surface2);padding:4px 16px;border-bottom:1px solid var(--border);
+  display:grid;grid-template-columns:28px 1fr auto auto;gap:8px;
 }
-.col-subhdr span{font-family:var(--pixel);font-size:5px;color:#444;letter-spacing:0.05em;text-transform:uppercase}
+.col-hdr span{font-size:9px;font-weight:600;letter-spacing:0.1em;color:var(--txt4);text-transform:uppercase}
 
-/* Train rows — the 8-bit board look */
-.train-rows{flex:1;overflow-y:auto;background:#000;padding:4px 0;scrollbar-width:none}
-.train-rows::-webkit-scrollbar{display:none}
+.train-list{flex:1;overflow-y:auto;scrollbar-width:none}
+.train-list::-webkit-scrollbar{display:none}
 
 .train-row{
-  display:grid;grid-template-columns:20px 1fr auto auto;
-  align-items:center;gap:8px;
-  padding:7px 14px;
-  border-bottom:1px solid #0a0a0a;
-  transition:background 0.15s;
+  display:grid;grid-template-columns:28px 1fr auto auto;
+  align-items:center;gap:8px;padding:9px 16px;
+  border-bottom:1px solid var(--border);
+  transition:background 0.12s;cursor:default;
 }
-.train-row:hover{background:#050505}
+.train-row:last-child{border-bottom:none}
+.train-row:hover{background:var(--surface2)}
 
-.t-badge{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--pixel);font-size:5px;color:#fff;flex-shrink:0}
-.t-dest{font-family:var(--pixel);font-size:7px;color:#e8e8e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0.03em}
-.t-car{font-family:var(--pixel);font-size:5px;color:#333;letter-spacing:0.03em;white-space:nowrap}
-.t-eta{font-family:var(--pixel);font-size:8px;text-align:right;white-space:nowrap;min-width:48px}
+.t-line{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--pixel);font-size:5px;color:#fff;flex-shrink:0}
+.t-dest{font-size:13px;font-weight:500;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t-cars{font-size:10px;color:var(--txt4);white-space:nowrap}
 
-/* ETA color states with pixel-glow */
-.eta-arr{color:#00ff41;text-shadow:0 0 6px #00ff41,0 0 12px #00ff41;animation:pulse 0.8s ease-in-out infinite}
-.eta-soon{color:#ffaa00;text-shadow:0 0 6px #ffaa00,0 0 12px rgba(255,170,0,0.5)}
-.eta-later{color:#e8e8e8}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.t-eta{font-family:var(--mono);font-size:14px;text-align:right;white-space:nowrap;min-width:52px}
+.eta-arr{color:var(--green);font-weight:700;animation:etaPulse 0.8s ease-in-out infinite}
+@keyframes etaPulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.eta-soon{color:var(--orange-line);font-weight:600}
+.eta-later{color:var(--txt2)}
 
-/* Waiting state */
-.no-trains{display:flex;align-items:center;justify-content:center;
-  background:#000;padding:20px;height:100%;
-  font-family:var(--pixel);font-size:7px;color:#333;letter-spacing:0.05em}
+.no-trains,.loading-row{display:flex;align-items:center;gap:8px;padding:16px;font-size:12px;color:var(--txt3)}
+.ldot{width:6px;height:6px;border-radius:50%;background:var(--txt4);animation:dotBlink 1.2s ease-in-out infinite}
+.ldot:nth-child(2){animation-delay:.4s}.ldot:nth-child(3){animation-delay:.8s}
+@keyframes dotBlink{0%,100%{opacity:1}50%{opacity:0.1}}
 
-/* Metro footer */
-.metro-footer{
-  background:#000;padding:5px 14px;
-  display:flex;align-items:center;justify-content:space-between;
-  border-top:2px solid #111;
+.metro-foot{padding:5px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;background:var(--surface2)}
+.metro-foot span{font-size:9px;color:var(--txt4);letter-spacing:0.05em}
+
+/* ─── ROW 3: CALENDARS ─── */
+.cal-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+
+.cal-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;
 }
-.metro-ticker{font-family:var(--pixel);font-size:6px;color:#444;letter-spacing:0.05em}
-.metro-updated{font-family:var(--pixel);font-size:6px;color:#333;letter-spacing:0.05em}
 
-/* LED loading dots */
-.led-row{display:flex;align-items:center;gap:6px;padding:14px;font-family:var(--pixel);font-size:6px;color:#333;letter-spacing:0.05em}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:var(--ga);animation:blink 1.2s ease-in-out infinite}
-.dot:nth-child(2){animation-delay:0.4s}.dot:nth-child(3){animation-delay:0.8s}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.1}}
+.cal-header{padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+.cal-person{display:flex;align-items:center;gap:8px}
+.cal-avatar{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.av-a{background:var(--rose)}
+.av-s{background:var(--blue)}
+.cal-name{font-size:12px;font-weight:700;color:var(--txt);letter-spacing:0.02em}
+.cal-month{font-size:10px;color:var(--txt3);font-weight:500}
 
-/* Responsive */
+.cal-body{flex:1;overflow:hidden}
+
+/* Day headers */
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);background:var(--surface2);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.cal-weekdays span{font-size:8px;font-weight:700;letter-spacing:0.1em;color:var(--txt4);
+  text-align:center;padding:5px 0;text-transform:uppercase}
+
+/* Date grid */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);flex:1}
+.cal-day{
+  border-right:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:4px 5px;min-height:0;display:flex;flex-direction:column;gap:2px;
+  position:relative;
+}
+.cal-day:nth-child(7n){border-right:none}
+.day-num{font-size:10px;font-weight:600;color:var(--txt2);line-height:1;margin-bottom:1px}
+.day-num.today{
+  width:18px;height:18px;background:var(--accent);color:#fff;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;
+}
+.day-num.other-month{color:var(--txt4)}
+
+.cal-event{
+  font-size:8px;font-weight:500;border-radius:3px;padding:1px 3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.4;
+}
+.ev-a{background:var(--rose-bg);color:var(--rose)}
+.ev-s{background:var(--blue-bg);color:var(--blue)}
+.ev-shared{background:var(--green-bg);color:var(--green)}
+
+/* Upcoming events list (shown instead of grid when calendar not loaded) */
+.cal-list{flex:1;overflow-y:auto;scrollbar-width:none;padding:4px 0}
+.cal-list::-webkit-scrollbar{display:none}
+.cal-evt-row{
+  display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;
+  padding:8px 16px;border-bottom:1px solid var(--border);
+}
+.cal-evt-row:last-child{border-bottom:none}
+.cal-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-a{background:var(--rose)}.dot-s{background:var(--blue)}.dot-shared{background:var(--green)}
+.evt-info{min-width:0}
+.evt-title{font-size:12px;font-weight:500;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.evt-day{font-size:10px;color:var(--txt3)}
+.evt-time{font-family:var(--mono);font-size:11px;color:var(--txt3);white-space:nowrap}
+
+.cal-empty{display:flex;align-items:center;justify-content:center;height:100%;
+  flex-direction:column;gap:6px;padding:20px;text-align:center}
+.cal-empty-icon{font-size:28px;opacity:0.25}
+.cal-empty-txt{font-size:11px;color:var(--txt3);line-height:1.5}
+.cal-connect-btn{
+  margin-top:8px;padding:6px 14px;background:var(--accent);color:#fff;
+  border:none;border-radius:6px;font-family:var(--body);font-size:11px;font-weight:600;
+  cursor:pointer;letter-spacing:0.03em;transition:opacity 0.15s;
+}
+.cal-connect-btn:hover{opacity:0.8}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.topbar{animation:fadeUp 0.45s ease both}
+.metro-wrap{animation:fadeUp 0.45s 0.07s ease both}
+.cal-row{animation:fadeUp 0.45s 0.14s ease both}
+
 @media(max-width:900px){
   html,body{overflow:auto}
-  .dash{height:auto;min-height:100vh}
+  .dash{height:auto;min-height:100vh;grid-template-rows:auto auto auto auto}
   .topbar{grid-template-columns:1fr}
-  .clock-card{min-width:unset}
   .weather-card{grid-template-columns:auto 1fr;grid-template-rows:auto auto}
-  .w-hourly{grid-column:1/-1}
-  .metro-columns{grid-template-columns:1fr}
-  .metro-col:first-child{border-right:none;border-bottom:2px solid #111}
+  .vdiv{display:none}
+  .metro-body{grid-template-columns:1fr}
+  .metro-col:first-child{border-right:none;border-bottom:1px solid var(--border)}
+  .cal-row{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 <div class="dash">
 
-  <!-- TOP BAR -->
+  <!-- ROW 1: CLOCK + WEATHER -->
   <div class="topbar">
-
-    <!-- CLOCK -->
     <div class="clock-card">
-      <div class="clock-label">LOCAL TIME</div>
-      <div class="clock-time" id="ct">00:00:00</div>
-      <div class="clock-date" id="cd">SATURDAY · APR 25 · 2026</div>
+      <div class="clock-eyebrow">Local Time</div>
+      <div class="clock-time" id="ct">
+        12<span class="clock-colon">:</span>00<span class="ampm">AM</span>
+      </div>
+      <div class="clock-date" id="cd">Saturday · April 25 · 2026</div>
     </div>
 
-    <!-- WEATHER -->
     <div class="weather-card">
-      <div class="w-now">
+      <div class="w-main">
         <div class="w-icon" id="wi">⛅</div>
         <div class="w-temp" id="wt">--°</div>
-        <div class="w-desc" id="wdesc">LOADING</div>
+        <div class="w-cond" id="wdesc">Loading</div>
       </div>
-      <div class="w-stats">
-        <div class="wstat"><span class="wstat-lbl">FEELS LIKE</span><span class="wstat-val" id="feels">--°C</span></div>
-        <div class="wstat"><span class="wstat-lbl">HUMIDITY</span><span class="wstat-val" id="humid">--%</span></div>
-        <div class="wstat"><span class="wstat-lbl">WIND</span><span class="wstat-val" id="wind">-- km/h</span></div>
-        <div class="wstat"><span class="wstat-lbl">UV INDEX</span><span class="wstat-val" id="uv">--</span></div>
+      <div class="vdiv"></div>
+      <div class="w-grid">
+        <div class="ws"><span class="ws-lbl">Feels Like</span><span class="ws-val" id="feels">--</span></div>
+        <div class="ws"><span class="ws-lbl">Humidity</span><span class="ws-val" id="humid">--</span></div>
+        <div class="ws"><span class="ws-lbl">Wind</span><span class="ws-val" id="wind">--</span></div>
+        <div class="ws"><span class="ws-lbl">UV Index</span><span class="ws-val" id="uv">--</span></div>
       </div>
+      <div class="vdiv"></div>
       <div class="w-hourly">
-        <div class="w-hourly-title">HOURLY FORECAST</div>
+        <div class="wh-title">Hourly</div>
         <div class="hourly-row" id="hourly"></div>
       </div>
     </div>
-
   </div>
 
-  <!-- METRO BOARD -->
+  <!-- ROW 2: METRO -->
   <div class="metro-wrap">
-
-    <!-- Station header -->
-    <div class="metro-header">
-      <div class="metro-header-left">
-        <div class="wmata-logo">
-          <div class="wmata-hex"><span class="wmata-m">M</span></div>
-        </div>
-        <div class="metro-station-name">BALLSTON-MU</div>
+    <div class="metro-banner">
+      <div class="metro-banner-left">
+        <div class="wmata-hex"><span class="wmata-m">M</span></div>
+        <div class="metro-stn">BALLSTON-MU</div>
         <div class="metro-lines">
-          <div class="line-pill lOR">OR</div>
-          <div class="line-pill lSV">SV</div>
+          <div class="lpill lOR">OR</div>
+          <div class="lpill lSV">SV</div>
         </div>
       </div>
-      <div class="metro-clock" id="mclock">--:--</div>
+      <div class="metro-banner-right">
+        <div class="status-pip" id="sPip"></div>
+        <div class="metro-clock" id="mclock">--:--</div>
+      </div>
     </div>
 
-    <!-- Two columns -->
-    <div class="metro-columns">
-
-      <!-- LEFT: toward DC -->
+    <div class="metro-body">
+      <!-- DC -->
       <div class="metro-col">
-        <div class="dir-header">
-          <div>
-            <div class="dir-label">← TOWARD DC</div>
-            <div class="dir-toward">NEW CARROLLTON / LARGO </div>
-          </div>
-          <div class="dir-arrow" style="color:#888">&#x25C4;</div>
+        <div class="dir-bar">
+          <span class="dir-name">← Toward DC</span>
+          <span class="dir-sub">New Carrollton · Largo</span>
         </div>
-        <div class="col-subhdr">
-          <span>DESTINATION</span><span>CAR</span><span>MIN</span>
+        <div class="col-hdr">
+          <span></span><span>Destination</span><span>Car</span><span>Min</span>
         </div>
-        <div class="train-rows" id="col-dc">
-          <div class="led-row"><div class="dot"></div><div class="dot"></div><div class="dot"></div><span>LOADING</span></div>
+        <div class="train-list" id="col-dc">
+          <div class="loading-row"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div><span>Loading</span></div>
         </div>
       </div>
-
-      <!-- RIGHT: toward Virginia -->
+      <!-- VA -->
       <div class="metro-col">
-        <div class="dir-header">
-          <div>
-            <div class="dir-label">TOWARD VIRGINIA →</div>
-            <div class="dir-toward">VIENNA / ASHBURN </div>
-          </div>
-          <div class="dir-arrow" style="color:#888">&#x25BA;</div>
+        <div class="dir-bar">
+          <span class="dir-name">Toward Virginia →</span>
+          <span class="dir-sub">Vienna · Ashburn</span>
         </div>
-        <div class="col-subhdr">
-          <span>DESTINATION</span><span>CAR</span><span>MIN</span>
+        <div class="col-hdr">
+          <span></span><span>Destination</span><span>Car</span><span>Min</span>
         </div>
-        <div class="train-rows" id="col-va">
-          <div class="led-row"><div class="dot"></div><div class="dot"></div><div class="dot"></div><span>LOADING</span></div>
+        <div class="train-list" id="col-va">
+          <div class="loading-row"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div><span>Loading</span></div>
         </div>
       </div>
-
     </div>
 
-    <!-- Footer -->
-    <div class="metro-footer">
-      <div class="metro-ticker">WMATA METRORAIL · REAL-TIME PREDICTIONS · BALLSTON-MU (K04)</div>
-      <div class="metro-updated">UPDATED: <span id="mts">--:--</span></div>
+    <div class="metro-foot">
+      <span>WMATA Real-Time · Ballston-MU (K04) · Arlington, VA</span>
+      <span>Updated <span id="mts">--:--</span></span>
+    </div>
+  </div>
+
+  <!-- ROW 3: CALENDARS -->
+  <div class="cal-row">
+
+    <!-- Ankita's Calendar -->
+    <div class="cal-card">
+      <div class="cal-header">
+        <div class="cal-person">
+          <div class="cal-avatar av-a">A</div>
+          <div class="cal-name">Ankita</div>
+        </div>
+        <div class="cal-month" id="cal-a-month">April 2026</div>
+      </div>
+      <div class="cal-body">
+        <div class="cal-empty">
+          <div class="cal-empty-icon">📅</div>
+          <div class="cal-empty-txt">Connect your Google Calendar<br>to see upcoming events here</div>
+          <button class="cal-connect-btn" onclick="alert('To connect: share your calendar API key or OAuth token in the CFG block in the script.')">Connect Calendar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suraj's Calendar -->
+    <div class="cal-card">
+      <div class="cal-header">
+        <div class="cal-person">
+          <div class="cal-avatar av-s">S</div>
+          <div class="cal-name">Suraj</div>
+        </div>
+        <div class="cal-month" id="cal-s-month">April 2026</div>
+      </div>
+      <div class="cal-body">
+        <div class="cal-empty">
+          <div class="cal-empty-icon">📅</div>
+          <div class="cal-empty-txt">Connect Suraj's Google Calendar<br>to see upcoming events here</div>
+          <button class="cal-connect-btn" onclick="alert('To connect: add the calendar ID for Suraj in the CFG block in the script.')">Connect Calendar</button>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -296,120 +401,104 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 const CFG={
   wmataKey:'de51925a8b784c738868a798a5bc4f18',
   stationCode:'K04',
-  lat:38.8820,lon:-77.1114,
-  metroRefresh:60
+  lat:38.8820, lon:-77.1114,
+  metroRefresh:60,
+  // Calendar IDs — fill these in once you share access:
+  // calAnkita: 'your-calendar-id@gmail.com',
+  // calSuraj:  'suraj-calendar-id@gmail.com',
 };
 
-const WMO={0:'Clear Sky',1:'Mainly Clear',2:'Partly Cloudy',3:'Overcast',45:'Fog',48:'Icy Fog',
-  51:'Light Drizzle',53:'Drizzle',55:'Heavy Drizzle',61:'Light Rain',63:'Rain',65:'Heavy Rain',
-  71:'Light Snow',73:'Snow',75:'Heavy Snow',80:'Rain Showers',81:'Rain Showers',82:'Heavy Showers',
-  95:'Thunderstorm',96:'Thunderstorm',99:'Thunderstorm'};
-const ICO={0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',48:'🌫',51:'🌦',53:'🌧',55:'🌧',
-  61:'🌦',63:'🌧',65:'🌧',71:'🌨',73:'❄️',75:'❄️',80:'🌦',81:'🌧',82:'⛈',
-  95:'⛈',96:'⛈',99:'⛈'};
-const DAYS=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
-const MONS=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+const WMO={0:'Clear Sky',1:'Mainly Clear',2:'Partly Cloudy',3:'Overcast',45:'Fog',48:'Icy Fog',51:'Light Drizzle',53:'Drizzle',55:'Heavy Drizzle',61:'Light Rain',63:'Rain',65:'Heavy Rain',71:'Light Snow',73:'Snow',75:'Heavy Snow',80:'Rain Showers',81:'Showers',82:'Heavy Showers',95:'Thunderstorm',96:'Thunderstorm',99:'Thunderstorm'};
+const ICO={0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',48:'🌫',51:'🌦',53:'🌧',55:'🌧',61:'🌦',63:'🌧',65:'🌧',71:'🌨',73:'❄️',75:'❄️',80:'🌦',81:'🌧',82:'⛈',95:'⛈',96:'⛈',99:'⛈'};
+const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MONS_SHORT=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const $=id=>document.getElementById(id);
 const pad=n=>String(n).padStart(2,'0');
 
-// CLOCK
+// ── CLOCK ──
 function tick(){
   const n=new Date();
-  $('ct').textContent=pad(n.getHours())+':'+pad(n.getMinutes())+':'+pad(n.getSeconds());
-  $('cd').textContent=DAYS[n.getDay()]+' \xb7 '+MONS[n.getMonth()]+' '+pad(n.getDate())+' \xb7 '+n.getFullYear();
-  $('mclock').textContent=pad(n.getHours())+':'+pad(n.getMinutes());
+  let h=n.getHours(),m=n.getMinutes();
+  const ampm=h>=12?'PM':'AM';
+  const h12=h%12||12;
+  $('ct').innerHTML=h12+'<span class="clock-colon">:</span>'+pad(m)+'<span class="ampm">'+ampm+'</span>';
+  $('cd').textContent=DAYS[n.getDay()]+' · '+MONS[n.getMonth()]+' '+n.getDate()+' · '+n.getFullYear();
+  $('mclock').textContent=pad(h)+':'+pad(m);
 }
 setInterval(tick,1000);tick();
 
-// WEATHER
+// ── WEATHER ──
 async function fetchWeather(){
   try{
-    const d=await fetch(
-      'https://api.open-meteo.com/v1/forecast?latitude='+CFG.lat+'&longitude='+CFG.lon
-      +'&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,relative_humidity_2m,uv_index'
-      +'&hourly=temperature_2m,weather_code,precipitation_probability'
-      +'&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&forecast_days=1'
-    ).then(r=>r.json());
+    const d=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+CFG.lat+'&longitude='+CFG.lon+'&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,relative_humidity_2m,uv_index&hourly=temperature_2m,weather_code,precipitation_probability&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&forecast_days=1').then(r=>r.json());
     const c=d.current,code=c.weather_code;
     $('wi').textContent=ICO[code]||'🌡';
     $('wt').textContent=Math.round(c.temperature_2m)+'°';
-    $('wdesc').textContent=(WMO[code]||'Unknown').toUpperCase();
+    $('wdesc').textContent=WMO[code]||'Unknown';
     $('feels').textContent=Math.round(c.apparent_temperature)+'°C';
     $('humid').textContent=c.relative_humidity_2m+'%';
     $('wind').textContent=Math.round(c.wind_speed_10m)+' km/h';
     $('uv').textContent=Math.round(c.uv_index);
-
     const nowH=new Date().getHours(),box=$('hourly');
     box.innerHTML='';
     for(let i=0;i<7;i++){
       const idx=nowH+i;if(idx>=d.hourly.temperature_2m.length)break;
-      const t=Math.round(d.hourly.temperature_2m[idx]);
-      const wc=d.hourly.weather_code[idx];
-      const pr=d.hourly.precipitation_probability[idx];
-      const hr=idx%24;
-      const lbl=i===0?'NOW':(hr<12?hr+'AM':hr===12?'12PM':(hr-12)+'PM');
+      const t=Math.round(d.hourly.temperature_2m[idx]),wc=d.hourly.weather_code[idx],pr=d.hourly.precipitation_probability[idx],hr=idx%24;
+      const lbl=i===0?'Now':(hr<12?hr+'am':hr===12?'12pm':(hr-12)+'pm');
       const el=document.createElement('div');
-      el.className='hblock'+(i===0?' now':'');
-      el.innerHTML='<div class="hlbl">'+lbl+'</div><div class="hico">'+(ICO[wc]||'🌡')+'</div><div class="htmp">'+t+'°</div><div class="hpct">'+(pr>10?pr+'%':'&nbsp;')+'</div>';
+      el.className='hb'+(i===0?' now':'');
+      el.innerHTML='<div class="hb-lbl">'+lbl+'</div><div class="hb-ico">'+(ICO[wc]||'🌡')+'</div><div class="hb-tmp">'+t+'°</div><div class="hb-pct">'+(pr>10?pr+'%':'')+'</div>';
       box.appendChild(el);
     }
-  }catch(e){console.warn('wx',e);}
+  }catch(e){console.warn('wx',e)}
 }
 
-// METRO — split by Group field (1=toward DC, 2=toward VA)
-function buildMetroRows(trains,colId){
-  const col=$(colId);
-  if(!trains.length){
-    col.innerHTML='<div class="no-trains">NO SERVICE</div>';
-    return;
-  }
+// ── METRO ──
+function buildRows(trains,id){
+  const col=$(id);
+  if(!trains.length){col.innerHTML='<div class="no-trains">No trains scheduled</div>';return}
   col.innerHTML='';
-  trains.slice(0,5).forEach(t=>{
-    const eta=t.Min;
-    const dest=(t.DestinationName||t.Destination||'UNKNOWN').toUpperCase();
-    const line=t.Line||'XX';
-    const cars=t.Car?t.Car+'C':'';
-    let cls='eta-later';
-    let etaTxt=(eta==='ARR'||eta==='BRD')?eta:eta+' MIN';
-    if(eta==='ARR'||eta==='BRD'||eta==='1')cls='eta-arr';
-    else if(eta==='2'||eta==='3')cls='eta-soon';
+  trains.slice(0,6).forEach(t=>{
+    const eta=t.Min,dest=(t.DestinationName||t.Destination||'Unknown'),line=t.Line||'XX',cars=t.Car?t.Car+'C':'';
+    let ecls='eta-later',rcls='train-row';
+    const etaTxt=(eta==='ARR'||eta==='BRD')?eta:(eta+' min');
+    if(eta==='ARR'||eta==='BRD'||eta==='1'){ecls='eta-arr';rcls='train-row arriving';}
+    else if(eta==='2'||eta==='3'){ecls='eta-soon';}
     const row=document.createElement('div');
-    row.className='train-row';
-    row.innerHTML=
-      '<div class="t-badge l'+line+'">'+line+'</div>'+
-      '<div class="t-dest">'+dest+'</div>'+
-      '<div class="t-car">'+cars+'</div>'+
-      '<div class="t-eta '+cls+'">'+etaTxt+'</div>';
+    row.className=rcls;
+    row.innerHTML='<div class="t-line l'+line+'">'+line+'</div><div class="t-dest">'+dest+'</div><div class="t-cars">'+cars+'</div><div class="t-eta '+ecls+'">'+etaTxt+'</div>';
     col.appendChild(row);
   });
 }
 
 async function fetchMetro(){
   try{
-    const data=await fetch(
-      'https://api.wmata.com/StationPrediction.svc/json/GetPrediction/'+CFG.stationCode,
-      {headers:{'api_key':CFG.wmataKey}}
-    ).then(r=>r.json());
-
+    const data=await fetch('https://api.wmata.com/StationPrediction.svc/json/GetPrediction/'+CFG.stationCode,{headers:{'api_key':CFG.wmataKey}}).then(r=>r.json());
     const trains=data.Trains||[];
-    // Group 1 = toward DC (eastbound), Group 2 = toward VA (westbound)
-    const toDC=trains.filter(t=>t.Group==='1');
-    const toVA=trains.filter(t=>t.Group==='2');
-    buildMetroRows(toDC,'col-dc');
-    buildMetroRows(toVA,'col-va');
-    const n=new Date();
-    $('mts').textContent=pad(n.getHours())+':'+pad(n.getMinutes());
+    buildRows(trains.filter(t=>t.Group==='1'),'col-dc');
+    buildRows(trains.filter(t=>t.Group==='2'),'col-va');
+    $('mts').textContent=pad(new Date().getHours())+':'+pad(new Date().getMinutes());
+    const p=$('sPip');p.style.background='#4ade80';
   }catch(e){
     console.warn('metro',e);
-    ['col-dc','col-va'].forEach(id=>{
-      $(id).innerHTML='<div class="led-row"><div class="dot"></div><span>SIGNAL LOST</span></div>';
-    });
+    ['col-dc','col-va'].forEach(id=>{$(id).innerHTML='<div class="no-trains">Connection lost</div>';});
+    $('sPip').style.background='#f87171';
   }
 }
 
+// ── CALENDAR MONTH LABEL ──
+function initCalLabels(){
+  const n=new Date();
+  const label=MONS[n.getMonth()]+' '+n.getFullYear();
+  $('cal-a-month').textContent=label;
+  $('cal-s-month').textContent=label;
+}
+initCalLabels();
+
 fetchWeather();
 fetchMetro();
-setInterval(()=>{fetchWeather();},10*60*1000);
+setInterval(fetchWeather,10*60*1000);
 setInterval(fetchMetro,CFG.metroRefresh*1000);
 </script>
 </body>

@@ -1,120 +1,416 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home Dashboard</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@500;700;900&family=Press+Start+2P&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07090d;
+  --surface:#0e1117;
+  --surface2:#131920;
+  --border:#1c2535;
+  --border2:#243044;
+  --amber:#f5a623;
+  --amber2:#7a4e0d;
+  --cyan:#00d4ff;
+  --cyan2:#004d5e;
+  --green:#00e676;
+  --green2:#003d1f;
+  --orange:#ff6d00;
+  --red:#ff1744;
+  --txt:#dde3ee;
+  --txt2:#5a6a82;
+  --txt3:#2e3d52;
+  --mono:'Share Tech Mono',monospace;
+  --display:'Orbitron',monospace;
+  --pixel:'Press Start 2P',monospace;
+  --body:'Inter',sans-serif;
+  --ga:0 0 8px rgba(245,166,35,0.5),0 0 24px rgba(245,166,35,0.2);
+  --gc:0 0 8px rgba(0,212,255,0.4),0 0 24px rgba(0,212,255,0.15);
+  --gg:0 0 8px rgba(0,230,118,0.5),0 0 24px rgba(0,230,118,0.2);
+}
+
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:var(--body)}
+
+/* subtle dot grid bg */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(0,212,255,0.04) 1px,transparent 1px);
+  background-size:28px 28px}
+
+.dash{position:relative;z-index:1;display:grid;width:100vw;height:100vh;
+  grid-template-rows:auto 1fr;gap:10px;padding:12px}
+
+/* ── TOP BAR ─────────────────────────────────────── */
+.topbar{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:stretch}
+
+/* CLOCK CARD */
+.clock-card{
+  background:var(--surface);border:1px solid var(--border2);border-radius:8px;
+  padding:16px 24px;display:flex;flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;min-width:300px;
+}
+.clock-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--amber),transparent);opacity:0.6}
+.clock-label{font-family:var(--mono);font-size:9px;letter-spacing:0.25em;color:var(--txt2);margin-bottom:8px}
+.clock-time{font-family:var(--display);font-size:clamp(44px,5vw,66px);font-weight:700;
+  color:var(--amber);text-shadow:var(--ga);letter-spacing:0.04em;line-height:1}
+.clock-date{font-family:var(--mono);font-size:11px;letter-spacing:0.15em;color:var(--txt2);margin-top:6px}
+
+/* WEATHER CARD */
+.weather-card{
+  background:var(--surface);border:1px solid var(--border2);border-radius:8px;
+  padding:16px 20px;display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;
+  position:relative;overflow:hidden;
+}
+.weather-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0.4}
+
+.w-now{display:flex;flex-direction:column;align-items:center;gap:4px}
+.w-icon{font-size:42px;line-height:1}
+.w-temp{font-family:var(--display);font-size:34px;font-weight:700;color:var(--cyan);text-shadow:var(--gc);line-height:1}
+.w-desc{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;color:var(--txt2);text-transform:uppercase;margin-top:2px}
+
+.w-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px}
+.wstat{display:flex;flex-direction:column;gap:1px}
+.wstat-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.18em;color:var(--txt3);text-transform:uppercase}
+.wstat-val{font-family:var(--mono);font-size:14px;color:var(--txt)}
+
+.w-hourly{display:flex;flex-direction:column;gap:4px;justify-content:center}
+.w-hourly-title{font-family:var(--mono);font-size:8px;letter-spacing:0.2em;color:var(--txt3);margin-bottom:4px}
+.hourly-row{display:flex;gap:6px}
+.hblock{display:flex;flex-direction:column;align-items:center;gap:2px;
+  min-width:44px;padding:5px 3px;border-radius:5px;
+  background:rgba(255,255,255,0.03);border:1px solid transparent;transition:border-color 0.2s}
+.hblock.now{border-color:var(--amber2);background:rgba(245,166,35,0.07)}
+.hlbl{font-family:var(--mono);font-size:8px;color:var(--txt2)}
+.hico{font-size:14px}
+.htmp{font-family:var(--mono);font-size:11px;color:var(--txt)}
+.hpct{font-family:var(--mono);font-size:8px;color:var(--cyan)}
+
+/* ── METRO BOARD ─────────────────────────────────── */
+.metro-wrap{
+  background:var(--surface);border:1px solid var(--border2);border-radius:8px;
+  display:flex;flex-direction:column;overflow:hidden;
+}
+
+/* Header bar — mimics real station signage */
+.metro-header{
+  background:#000;padding:10px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:3px solid #111;
+}
+.metro-header-left{display:flex;align-items:center;gap:12px}
+.wmata-logo{display:flex;align-items:center;gap:8px}
+.wmata-hex{width:28px;height:28px;background:#00529b;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center}
+.wmata-m{font-family:var(--pixel);font-size:8px;color:#fff}
+.metro-station-name{font-family:var(--pixel);font-size:11px;color:#fff;letter-spacing:0.05em}
+.metro-lines{display:flex;gap:5px}
+.line-pill{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--pixel);font-size:6px;font-weight:700;color:#fff}
+.lOR{background:#ED8B00}.lSV{background:#919D9D;color:#111}.lBL{background:#009CDE}.lGR{background:#00B140}.lRD{background:#BF0000}.lYL{background:#FFD100;color:#222}
+.metro-clock{font-family:var(--pixel);font-size:10px;color:#fff;letter-spacing:0.1em}
+
+/* Two-column split board */
+.metro-columns{display:grid;grid-template-columns:1fr 1fr;flex:1;min-height:0}
+.metro-col{display:flex;flex-direction:column;overflow:hidden}
+.metro-col:first-child{border-right:2px solid #111}
+
+/* Direction header — pixel font, colored bar */
+.dir-header{
+  background:#0a0a0a;padding:8px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:2px solid #111;
+}
+.dir-label{font-family:var(--pixel);font-size:7px;letter-spacing:0.05em;color:#aaa}
+.dir-arrow{font-family:var(--pixel);font-size:10px}
+.dir-toward{font-family:var(--pixel);font-size:6px;color:#666;letter-spacing:0.03em}
+
+/* Column sub-header row */
+.col-subhdr{
+  background:#050505;padding:4px 14px;
+  display:grid;grid-template-columns:1fr auto auto;gap:8px;
+  border-bottom:1px solid #111;
+}
+.col-subhdr span{font-family:var(--pixel);font-size:5px;color:#444;letter-spacing:0.05em;text-transform:uppercase}
+
+/* Train rows — the 8-bit board look */
+.train-rows{flex:1;overflow-y:auto;background:#000;padding:4px 0;scrollbar-width:none}
+.train-rows::-webkit-scrollbar{display:none}
+
+.train-row{
+  display:grid;grid-template-columns:20px 1fr auto auto;
+  align-items:center;gap:8px;
+  padding:7px 14px;
+  border-bottom:1px solid #0a0a0a;
+  transition:background 0.15s;
+}
+.train-row:hover{background:#050505}
+
+.t-badge{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--pixel);font-size:5px;color:#fff;flex-shrink:0}
+.t-dest{font-family:var(--pixel);font-size:7px;color:#e8e8e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0.03em}
+.t-car{font-family:var(--pixel);font-size:5px;color:#333;letter-spacing:0.03em;white-space:nowrap}
+.t-eta{font-family:var(--pixel);font-size:8px;text-align:right;white-space:nowrap;min-width:48px}
+
+/* ETA color states with pixel-glow */
+.eta-arr{color:#00ff41;text-shadow:0 0 6px #00ff41,0 0 12px #00ff41;animation:pulse 0.8s ease-in-out infinite}
+.eta-soon{color:#ffaa00;text-shadow:0 0 6px #ffaa00,0 0 12px rgba(255,170,0,0.5)}
+.eta-later{color:#e8e8e8}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+/* Waiting state */
+.no-trains{display:flex;align-items:center;justify-content:center;
+  background:#000;padding:20px;height:100%;
+  font-family:var(--pixel);font-size:7px;color:#333;letter-spacing:0.05em}
+
+/* Metro footer */
+.metro-footer{
+  background:#000;padding:5px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:2px solid #111;
+}
+.metro-ticker{font-family:var(--pixel);font-size:6px;color:#444;letter-spacing:0.05em}
+.metro-updated{font-family:var(--pixel);font-size:6px;color:#333;letter-spacing:0.05em}
+
+/* LED loading dots */
+.led-row{display:flex;align-items:center;gap:6px;padding:14px;font-family:var(--pixel);font-size:6px;color:#333;letter-spacing:0.05em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:var(--ga);animation:blink 1.2s ease-in-out infinite}
+.dot:nth-child(2){animation-delay:0.4s}.dot:nth-child(3){animation-delay:0.8s}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.1}}
+
+/* Responsive */
+@media(max-width:900px){
+  html,body{overflow:auto}
+  .dash{height:auto;min-height:100vh}
+  .topbar{grid-template-columns:1fr}
+  .clock-card{min-width:unset}
+  .weather-card{grid-template-columns:auto 1fr;grid-template-rows:auto auto}
+  .w-hourly{grid-column:1/-1}
+  .metro-columns{grid-template-columns:1fr}
+  .metro-col:first-child{border-right:none;border-bottom:2px solid #111}
+}
+</style>
 </head>
 <body>
+<div class="dash">
 
-  <div class="scanline"></div>
-  <div class="grid-bg"></div>
+  <!-- TOP BAR -->
+  <div class="topbar">
 
-  <div class="dashboard">
-
-    <!-- TOP ROW: Clock + Weather -->
-    <div class="top-row">
-
-      <!-- CLOCK -->
-      <div class="panel clock-panel">
-        <div class="panel-label">LOCAL TIME</div>
-        <div class="clock-time" id="clock-time">00:00:00</div>
-        <div class="clock-date" id="clock-date">MONDAY · JAN 1 · 2025</div>
-      </div>
-
-      <!-- WEATHER -->
-      <div class="panel weather-panel">
-        <div class="panel-label">BALLSTON, ARLINGTON, VA</div>
-        <div class="weather-main" id="weather-main">
-          <div class="weather-now">
-            <div class="weather-icon" id="weather-icon">⛅</div>
-            <div class="weather-temp" id="weather-temp">--°</div>
-            <div class="weather-desc" id="weather-desc">Loading...</div>
-          </div>
-          <div class="weather-details" id="weather-details">
-            <div class="weather-detail"><span class="detail-label">FEELS</span><span class="detail-val" id="feels-like">--°</span></div>
-            <div class="weather-detail"><span class="detail-label">HUMIDITY</span><span class="detail-val" id="humidity">--%</span></div>
-            <div class="weather-detail"><span class="detail-label">WIND</span><span class="detail-val" id="wind">-- km/h</span></div>
-            <div class="weather-detail"><span class="detail-label">UV INDEX</span><span class="detail-val" id="uv">--</span></div>
-          </div>
-        </div>
-        <!-- Hourly forecast -->
-        <div class="hourly-forecast" id="hourly-forecast">
-          <!-- Populated by JS -->
-        </div>
-      </div>
-
+    <!-- CLOCK -->
+    <div class="clock-card">
+      <div class="clock-label">LOCAL TIME</div>
+      <div class="clock-time" id="ct">00:00:00</div>
+      <div class="clock-date" id="cd">SATURDAY · APR 25 · 2026</div>
     </div>
 
-    <!-- BOTTOM ROW: Metro + Sun/Air -->
-    <div class="bottom-row">
-
-      <!-- METRO BOARD -->
-      <div class="panel metro-panel">
-        <div class="panel-label">WMATA · <span id="metro-station-name">SILVER SPRING</span></div>
-        <div class="metro-board" id="metro-board">
-          <div class="metro-loading">
-            <div class="led-dot"></div>
-            <div class="led-dot"></div>
-            <div class="led-dot"></div>
-            <span>AWAITING SIGNAL</span>
-          </div>
-        </div>
-        <div class="metro-updated">LAST UPDATED: <span id="metro-time">--:--</span></div>
+    <!-- WEATHER -->
+    <div class="weather-card">
+      <div class="w-now">
+        <div class="w-icon" id="wi">⛅</div>
+        <div class="w-temp" id="wt">--°</div>
+        <div class="w-desc" id="wdesc">LOADING</div>
       </div>
-
-      <!-- RIGHT COLUMN: Sun + Air Quality -->
-      <div class="side-panels">
-
-        <div class="panel sun-panel">
-          <div class="panel-label">SUN</div>
-          <div class="sun-row">
-            <div class="sun-item">
-              <div class="sun-icon rise">▲</div>
-              <div class="sun-label">RISE</div>
-              <div class="sun-time" id="sunrise">--:--</div>
-            </div>
-            <div class="sun-arc" id="sun-arc-wrap">
-              <svg viewBox="0 0 120 60" class="arc-svg">
-                <path d="M10,55 Q60,-10 110,55" fill="none" stroke="#2a2a2a" stroke-width="2"/>
-                <path d="M10,55 Q60,-10 110,55" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="200" stroke-dashoffset="200" id="arc-progress" class="arc-fill"/>
-                <circle id="sun-dot" cx="10" cy="55" r="5" fill="#f59e0b"/>
-              </svg>
-            </div>
-            <div class="sun-item">
-              <div class="sun-icon set">▼</div>
-              <div class="sun-label">SET</div>
-              <div class="sun-time" id="sunset">--:--</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel air-panel">
-          <div class="panel-label">AIR QUALITY · AQI</div>
-          <div class="aqi-display">
-            <div class="aqi-number" id="aqi-number">--</div>
-            <div class="aqi-bar-wrap">
-              <div class="aqi-bar">
-                <div class="aqi-fill" id="aqi-fill"></div>
-                <div class="aqi-marker" id="aqi-marker"></div>
-              </div>
-              <div class="aqi-labels">
-                <span>GOOD</span><span>MOD</span><span>USG</span><span>UNHLT</span><span>HAZRD</span>
-              </div>
-            </div>
-            <div class="aqi-status" id="aqi-status">LOADING...</div>
-          </div>
-        </div>
-
+      <div class="w-stats">
+        <div class="wstat"><span class="wstat-lbl">FEELS LIKE</span><span class="wstat-val" id="feels">--°C</span></div>
+        <div class="wstat"><span class="wstat-lbl">HUMIDITY</span><span class="wstat-val" id="humid">--%</span></div>
+        <div class="wstat"><span class="wstat-lbl">WIND</span><span class="wstat-val" id="wind">-- km/h</span></div>
+        <div class="wstat"><span class="wstat-lbl">UV INDEX</span><span class="wstat-val" id="uv">--</span></div>
+      </div>
+      <div class="w-hourly">
+        <div class="w-hourly-title">HOURLY FORECAST</div>
+        <div class="hourly-row" id="hourly"></div>
       </div>
     </div>
 
   </div>
 
-  <script src="script.js"></script>
+  <!-- METRO BOARD -->
+  <div class="metro-wrap">
+
+    <!-- Station header -->
+    <div class="metro-header">
+      <div class="metro-header-left">
+        <div class="wmata-logo">
+          <div class="wmata-hex"><span class="wmata-m">M</span></div>
+        </div>
+        <div class="metro-station-name">BALLSTON-MU</div>
+        <div class="metro-lines">
+          <div class="line-pill lOR">OR</div>
+          <div class="line-pill lSV">SV</div>
+        </div>
+      </div>
+      <div class="metro-clock" id="mclock">--:--</div>
+    </div>
+
+    <!-- Two columns -->
+    <div class="metro-columns">
+
+      <!-- LEFT: toward DC -->
+      <div class="metro-col">
+        <div class="dir-header">
+          <div>
+            <div class="dir-label">← TOWARD DC</div>
+            <div class="dir-toward">NEW CARROLLTON / LARGO / VIENNA</div>
+          </div>
+          <div class="dir-arrow" style="color:#888">&#x25C4;</div>
+        </div>
+        <div class="col-subhdr">
+          <span>DESTINATION</span><span>CAR</span><span>MIN</span>
+        </div>
+        <div class="train-rows" id="col-dc">
+          <div class="led-row"><div class="dot"></div><div class="dot"></div><div class="dot"></div><span>LOADING</span></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: toward Virginia -->
+      <div class="metro-col">
+        <div class="dir-header">
+          <div>
+            <div class="dir-label">TOWARD VIRGINIA →</div>
+            <div class="dir-toward">VIENNA / ASHBURN / FRANCONIA</div>
+          </div>
+          <div class="dir-arrow" style="color:#888">&#x25BA;</div>
+        </div>
+        <div class="col-subhdr">
+          <span>DESTINATION</span><span>CAR</span><span>MIN</span>
+        </div>
+        <div class="train-rows" id="col-va">
+          <div class="led-row"><div class="dot"></div><div class="dot"></div><div class="dot"></div><span>LOADING</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="metro-footer">
+      <div class="metro-ticker">WMATA METRORAIL · REAL-TIME PREDICTIONS · BALLSTON-MU (K04)</div>
+      <div class="metro-updated">UPDATED: <span id="mts">--:--</span></div>
+    </div>
+
+  </div>
+
+</div>
+<script>
+const CFG={
+  wmataKey:'de51925a8b784c738868a798a5bc4f18',
+  stationCode:'K04',
+  lat:38.8820,lon:-77.1114,
+  metroRefresh:60
+};
+
+const WMO={0:'Clear Sky',1:'Mainly Clear',2:'Partly Cloudy',3:'Overcast',45:'Fog',48:'Icy Fog',
+  51:'Light Drizzle',53:'Drizzle',55:'Heavy Drizzle',61:'Light Rain',63:'Rain',65:'Heavy Rain',
+  71:'Light Snow',73:'Snow',75:'Heavy Snow',80:'Rain Showers',81:'Rain Showers',82:'Heavy Showers',
+  95:'Thunderstorm',96:'Thunderstorm',99:'Thunderstorm'};
+const ICO={0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',48:'🌫',51:'🌦',53:'🌧',55:'🌧',
+  61:'🌦',63:'🌧',65:'🌧',71:'🌨',73:'❄️',75:'❄️',80:'🌦',81:'🌧',82:'⛈',
+  95:'⛈',96:'⛈',99:'⛈'};
+const DAYS=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+const MONS=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,'0');
+
+// CLOCK
+function tick(){
+  const n=new Date();
+  $('ct').textContent=pad(n.getHours())+':'+pad(n.getMinutes())+':'+pad(n.getSeconds());
+  $('cd').textContent=DAYS[n.getDay()]+' \xb7 '+MONS[n.getMonth()]+' '+pad(n.getDate())+' \xb7 '+n.getFullYear();
+  $('mclock').textContent=pad(n.getHours())+':'+pad(n.getMinutes());
+}
+setInterval(tick,1000);tick();
+
+// WEATHER
+async function fetchWeather(){
+  try{
+    const d=await fetch(
+      'https://api.open-meteo.com/v1/forecast?latitude='+CFG.lat+'&longitude='+CFG.lon
+      +'&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,relative_humidity_2m,uv_index'
+      +'&hourly=temperature_2m,weather_code,precipitation_probability'
+      +'&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&forecast_days=1'
+    ).then(r=>r.json());
+    const c=d.current,code=c.weather_code;
+    $('wi').textContent=ICO[code]||'🌡';
+    $('wt').textContent=Math.round(c.temperature_2m)+'°';
+    $('wdesc').textContent=(WMO[code]||'Unknown').toUpperCase();
+    $('feels').textContent=Math.round(c.apparent_temperature)+'°C';
+    $('humid').textContent=c.relative_humidity_2m+'%';
+    $('wind').textContent=Math.round(c.wind_speed_10m)+' km/h';
+    $('uv').textContent=Math.round(c.uv_index);
+
+    const nowH=new Date().getHours(),box=$('hourly');
+    box.innerHTML='';
+    for(let i=0;i<7;i++){
+      const idx=nowH+i;if(idx>=d.hourly.temperature_2m.length)break;
+      const t=Math.round(d.hourly.temperature_2m[idx]);
+      const wc=d.hourly.weather_code[idx];
+      const pr=d.hourly.precipitation_probability[idx];
+      const hr=idx%24;
+      const lbl=i===0?'NOW':(hr<12?hr+'AM':hr===12?'12PM':(hr-12)+'PM');
+      const el=document.createElement('div');
+      el.className='hblock'+(i===0?' now':'');
+      el.innerHTML='<div class="hlbl">'+lbl+'</div><div class="hico">'+(ICO[wc]||'🌡')+'</div><div class="htmp">'+t+'°</div><div class="hpct">'+(pr>10?pr+'%':'&nbsp;')+'</div>';
+      box.appendChild(el);
+    }
+  }catch(e){console.warn('wx',e);}
+}
+
+// METRO — split by Group field (1=toward DC, 2=toward VA)
+function buildMetroRows(trains,colId){
+  const col=$(colId);
+  if(!trains.length){
+    col.innerHTML='<div class="no-trains">NO SERVICE</div>';
+    return;
+  }
+  col.innerHTML='';
+  trains.slice(0,5).forEach(t=>{
+    const eta=t.Min;
+    const dest=(t.DestinationName||t.Destination||'UNKNOWN').toUpperCase();
+    const line=t.Line||'XX';
+    const cars=t.Car?t.Car+'C':'';
+    let cls='eta-later';
+    let etaTxt=(eta==='ARR'||eta==='BRD')?eta:eta+' MIN';
+    if(eta==='ARR'||eta==='BRD'||eta==='1')cls='eta-arr';
+    else if(eta==='2'||eta==='3')cls='eta-soon';
+    const row=document.createElement('div');
+    row.className='train-row';
+    row.innerHTML=
+      '<div class="t-badge l'+line+'">'+line+'</div>'+
+      '<div class="t-dest">'+dest+'</div>'+
+      '<div class="t-car">'+cars+'</div>'+
+      '<div class="t-eta '+cls+'">'+etaTxt+'</div>';
+    col.appendChild(row);
+  });
+}
+
+async function fetchMetro(){
+  try{
+    const data=await fetch(
+      'https://api.wmata.com/StationPrediction.svc/json/GetPrediction/'+CFG.stationCode,
+      {headers:{'api_key':CFG.wmataKey}}
+    ).then(r=>r.json());
+
+    const trains=data.Trains||[];
+    // Group 1 = toward DC (eastbound), Group 2 = toward VA (westbound)
+    const toDC=trains.filter(t=>t.Group==='1');
+    const toVA=trains.filter(t=>t.Group==='2');
+    buildMetroRows(toDC,'col-dc');
+    buildMetroRows(toVA,'col-va');
+    const n=new Date();
+    $('mts').textContent=pad(n.getHours())+':'+pad(n.getMinutes());
+  }catch(e){
+    console.warn('metro',e);
+    ['col-dc','col-va'].forEach(id=>{
+      $(id).innerHTML='<div class="led-row"><div class="dot"></div><span>SIGNAL LOST</span></div>';
+    });
+  }
+}
+
+fetchWeather();
+fetchMetro();
+setInterval(()=>{fetchWeather();},10*60*1000);
+setInterval(fetchMetro,CFG.metroRefresh*1000);
+</script>
 </body>
 </html>

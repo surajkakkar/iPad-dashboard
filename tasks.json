@@ -1,0 +1,22 @@
+{
+  "categories": [
+    {
+      "name": "🛒 Shopping",
+      "items": [
+        { "text": "Groceries — vegetables & fruits", "done": false, "priority": "med" },
+        { "text": "Toothpaste & shampoo", "done": false, "priority": "low" },
+        { "text": "Suraj's birthday card", "done": true, "priority": "high" }
+      ]
+    },
+    {
+      "name": "✅ To Do",
+      "items": [
+        { "text": "MBA final project submission", "done": false, "priority": "high" },
+        { "text": "Reply to Sarab re: ERM role", "done": false, "priority": "high" },
+        { "text": "Call parents — Sunday", "done": false, "priority": "med" },
+        { "text": "Book airport pickup for May 9", "done": false, "priority": "med" },
+        { "text": "Print wedding venue shortlist", "done": true, "priority": "low" }
+      ]
+    }
+  ]
+}

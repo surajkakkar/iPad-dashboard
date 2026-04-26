@@ -17,7 +17,6 @@
   --card:#ffffff;
   --card2:#f0ede8;
   --border:#d8d2c8;
-  --border2:#b8b0a4;
   --green:#1a5c35;
   --orange-line:#c05a00;
   --mono:'Share Tech Mono',monospace;
@@ -29,425 +28,290 @@
   --shadow:0 1px 1px rgba(0,0,0,0.06),0 2px 8px rgba(0,0,0,0.07);
 }
 
-html,body{
-  width:100%;height:100%;overflow:hidden;
-  background:var(--paper);color:var(--ink);
-  font-family:var(--body);-webkit-font-smoothing:antialiased;
-}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--paper);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
 
-/* E-ink paper grain texture */
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  opacity:0.6;
-}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");opacity:0.6}
 
-.dash{
-  position:relative;z-index:1;
-  width:100vw;height:100vh;
-  display:grid;
-  grid-template-rows:auto auto 1fr auto;
-  gap:var(--gap);padding:12px;
-}
+/* Weather background — changes with condition */
+body.wx-rain{background:linear-gradient(160deg,#c8d4dc,#b0bec8)}
+body.wx-clear-day{background:linear-gradient(160deg,#e8f0f8,#d4e4f0)}
+body.wx-clear-night{background:linear-gradient(160deg,#1c2030,#2a3048);--paper:#1c2030;--ink:#e8e4de;--ink2:#c0bab0;--ink3:#8a8478;--ink4:#5a5448;--ink5:#3a342c;--card:#242030;--card2:#1c1c28;--border:#30302c}
+body.wx-cloud{background:linear-gradient(160deg,#e0dcd6,#d0ccc4)}
+body.wx-snow{background:linear-gradient(160deg,#e8eef4,#d4dce8)}
+body.wx-storm{background:linear-gradient(160deg,#2c2c38,#3c3844);--paper:#2c2c38;--ink:#e8e4de;--ink2:#c0bab0;--ink3:#8a8478;--ink4:#5a5448;--ink5:#3a342c;--card:#242030;--card2:#1c1c28;--border:#30302c}
 
-/* ══════════════════════════════
-   ROW 1 — CLOCKS + WEATHER
-══════════════════════════════ */
-.top-bar{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr 2px 1.8fr;
-  gap:var(--gap);
-  align-items:stretch;
-}
+.dash{position:relative;z-index:1;width:100vw;height:100vh;display:grid;grid-template-rows:auto auto 1fr auto;gap:var(--gap);padding:12px}
 
-/* shared card base */
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  box-shadow:var(--shadow);
-  position:relative;overflow:hidden;
-}
+/* ── TOP BAR: clocks + weather ── */
+.top-bar{display:grid;grid-template-columns:1fr 1fr 1fr 2px 2fr;gap:var(--gap);align-items:stretch}
+.top-vline{width:2px;background:var(--border);border-radius:1px}
 
-/* ── CLOCK CARDS ── */
-.clock-card{
-  padding:16px 20px;
-  display:flex;flex-direction:column;justify-content:space-between;
-}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);position:relative;overflow:hidden}
 
-/* Primary clock — larger */
-.clock-card.primary .clock-time{
-  font-family:var(--serif);
-  font-size:clamp(48px,5.5vw,68px);
-  line-height:1;color:var(--ink);
-}
-.clock-card.secondary .clock-time{
-  font-family:var(--serif);
-  font-size:clamp(32px,3.5vw,44px);
-  line-height:1;color:var(--ink);
-}
-
+/* Clock cards */
+.clock-card{padding:14px 18px;display:flex;flex-direction:column;justify-content:space-between}
+.clock-card.primary::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ink);border-radius:var(--r) 0 0 var(--r)}
+.clock-flag{position:absolute;top:10px;right:12px;font-size:18px;opacity:0.6}
+.clock-label{font-size:7px;font-weight:700;letter-spacing:0.22em;color:var(--ink4);text-transform:uppercase}
+.clock-city{font-size:10px;font-weight:600;color:var(--ink2);margin-top:2px}
+.clock-card.primary .clock-time{font-family:var(--serif);font-size:clamp(44px,5vw,64px);line-height:1;color:var(--ink)}
+.clock-card.secondary .clock-time{font-family:var(--serif);font-size:clamp(28px,3.2vw,42px);line-height:1;color:var(--ink)}
 .clock-colon{animation:blinkColon 1s step-end infinite}
 @keyframes blinkColon{0%,100%{opacity:1}50%{opacity:0.08}}
+.clock-ampm{font-family:var(--body);font-weight:400;color:var(--ink3);vertical-align:middle;margin-left:3px}
+.clock-card.primary .clock-ampm{font-size:0.32em;letter-spacing:0.06em}
+.clock-card.secondary .clock-ampm{font-size:0.36em;letter-spacing:0.05em}
+.clock-date{font-size:9px;color:var(--ink3);margin-top:5px}
 
-.clock-ampm{
-  font-family:var(--body);font-weight:400;
-  color:var(--ink3);vertical-align:middle;margin-left:4px;
-}
-.clock-card.primary .clock-ampm{font-size:0.34em;letter-spacing:0.06em}
-.clock-card.secondary .clock-ampm{font-size:0.38em;letter-spacing:0.06em}
-
-.clock-top{display:flex;flex-direction:column;gap:4px}
-.clock-label{font-size:8px;font-weight:700;letter-spacing:0.22em;color:var(--ink4);text-transform:uppercase}
-.clock-city{font-size:11px;font-weight:600;color:var(--ink2);margin-top:2px}
-.clock-date{font-size:10px;color:var(--ink3);margin-top:6px;letter-spacing:0.01em}
-
-/* Accent stripe on primary */
-.clock-card.primary::after{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:var(--ink);border-radius:var(--r) 0 0 var(--r);
-}
-
-/* Top-right flag badge */
-.clock-flag{
-  position:absolute;top:12px;right:14px;
-  font-size:20px;line-height:1;opacity:0.7;
-}
-
-/* Vertical separator between clocks and weather */
-.top-vline{width:2px;background:var(--border);border-radius:1px;align-self:stretch}
-
-/* ── WEATHER CARD ── */
+/* Weather card — Apple-style */
 .weather-card{
-  padding:14px 18px;
-  display:grid;
-  grid-template-columns:auto 1px 1fr 1px auto;
-  gap:14px;align-items:center;
+  padding:0;display:flex;flex-direction:column;overflow:hidden;
+  background:var(--card);
 }
-.w-vdiv{width:1px;height:60%;background:var(--border);align-self:center}
 
-.w-now{display:flex;flex-direction:column;align-items:center;gap:3px}
-.w-icon{font-size:36px;line-height:1}
-.w-temp{font-family:var(--serif);font-size:34px;color:var(--ink);line-height:1.1}
-.w-cond{font-size:8px;font-weight:700;letter-spacing:0.14em;color:var(--ink4);text-transform:uppercase;text-align:center;margin-top:2px}
+/* Top section: current conditions */
+.wx-current{
+  padding:12px 16px 10px;
+  display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;
+  border-bottom:1px solid var(--border);
+}
+.wx-left{display:flex;flex-direction:column;align-items:center;gap:2px}
+.wx-emoji{font-size:40px;line-height:1;transition:all 0.6s ease}
+.wx-temp{font-family:var(--serif);font-size:42px;color:var(--ink);line-height:1.05}
+.wx-desc{font-size:8px;font-weight:700;letter-spacing:0.14em;color:var(--ink4);text-transform:uppercase;text-align:center;margin-top:2px}
 
-.w-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
+.wx-middle{display:flex;flex-direction:column;gap:5px;justify-content:center}
+.wx-hl{font-size:11px;color:var(--ink3);font-weight:500}
+.wx-hl span{font-weight:700;color:var(--ink2)}
+.wx-summary{font-size:10px;color:var(--ink3);line-height:1.45;font-style:italic;max-width:220px}
+
+.wx-stats{display:grid;grid-template-columns:1fr 1fr;gap:5px 12px;align-self:center}
 .ws{display:flex;flex-direction:column;gap:1px}
-.ws-l{font-size:7px;font-weight:700;letter-spacing:0.18em;color:var(--ink5);text-transform:uppercase}
-.ws-v{font-family:var(--mono);font-size:13px;color:var(--ink2)}
+.ws-l{font-size:7px;font-weight:700;letter-spacing:0.16em;color:var(--ink5);text-transform:uppercase}
+.ws-v{font-family:var(--mono);font-size:12px;color:var(--ink2)}
 
-.w-hourly{display:flex;flex-direction:column;gap:4px}
-.wh-lbl{font-size:7px;font-weight:700;letter-spacing:0.18em;color:var(--ink5);text-transform:uppercase;margin-bottom:4px}
-.hourly-row{display:flex;gap:4px}
-.hb{
-  display:flex;flex-direction:column;align-items:center;gap:2px;
-  min-width:42px;padding:6px 3px;
-  border-radius:6px;
-  border:1px solid var(--border);
+/* Hourly scroll — Apple weather style */
+.wx-hourly{
+  display:flex;align-items:stretch;overflow-x:auto;
+  scrollbar-width:none;flex-shrink:0;
+  padding:0;
   background:var(--card2);
-  transition:border-color 0.15s;
 }
-.hb.now{background:var(--ink);border-color:var(--ink)}
-.hb.now .hb-lbl,.hb.now .hb-tmp{color:rgba(255,255,255,0.85)}
+.wx-hourly::-webkit-scrollbar{display:none}
+
+.hb{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  min-width:56px;padding:8px 4px;flex-shrink:0;
+  border-right:1px solid var(--border);
+  position:relative;
+}
+.hb:last-child{border-right:none}
+.hb.now{background:var(--ink)}
+.hb.now .hb-lbl,.hb.now .hb-tmp,.hb.now .hb-fl{color:rgba(255,255,255,0.85)}
 .hb.now .hb-pct{color:rgba(255,255,255,0.5)}
-.hb-lbl{font-size:7px;font-weight:600;color:var(--ink4)}
-.hb-ico{font-size:13px}
-.hb-tmp{font-family:var(--mono);font-size:11px;color:var(--ink)}
-.hb-pct{font-size:7px;color:var(--ink3);font-weight:500}
+.hb-lbl{font-size:8px;font-weight:600;color:var(--ink4);white-space:nowrap}
+.hb-ico{font-size:18px;line-height:1}
+.hb-tmp{font-family:var(--mono);font-size:13px;color:var(--ink);font-weight:500}
+.hb-fl{font-size:8px;color:var(--ink4)}
+.hb-pct{font-size:8px;font-weight:600;color:#1e6bb5}
 
-/* ══════════════════════════════
-   ROW 2 — METRO
-══════════════════════════════ */
-.metro-card{
-  display:flex;flex-direction:column;overflow:hidden;
-}
+/* sunrise/sunset special */
+.hb.sunrise .hb-ico,.hb.sunset .hb-ico{font-size:15px}
+.hb.sunrise .hb-lbl,.hb.sunset .hb-lbl{color:var(--orange-line);font-weight:700}
 
-/* Station banner — ink block */
-.metro-banner{
-  background:var(--ink);
-  padding:9px 18px;
-  display:flex;align-items:center;justify-content:space-between;
-  border-radius:var(--r) var(--r) 0 0;
-  flex-shrink:0;
-}
-.metro-banner-left{display:flex;align-items:center;gap:12px}
-.wmata-hex{
-  width:24px;height:24px;background:#1a6bb5;
-  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-}
-.wmata-m{font-family:var(--pixel);font-size:6px;color:#fff}
-.metro-stn{font-family:var(--pixel);font-size:9px;color:#fff;letter-spacing:0.07em}
-.metro-lines{display:flex;gap:4px}
-.lpill{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--pixel);font-size:5px;color:#fff;border:1.5px solid rgba(255,255,255,0.2)}
-.lOR{background:#c05a00}.lSV{background:#707880;color:#fff}
-.lBL{background:#0070a8}.lGR{background:#147832}.lRD{background:#a00000}.lYL{background:#c8a000}
+/* ── METRO (2/3 of middle row) ── */
+.mid-row{display:grid;grid-template-columns:2fr 1fr;gap:var(--gap)}
 
-.metro-banner-right{display:flex;align-items:center;gap:8px}
+.metro-card{display:flex;flex-direction:column;overflow:hidden}
+.metro-banner{background:var(--ink);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;border-radius:var(--r) var(--r) 0 0;flex-shrink:0}
+.metro-banner-left{display:flex;align-items:center;gap:10px}
+.wmata-hex{width:20px;height:20px;background:#1a6bb5;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.wmata-m{font-family:var(--pixel);font-size:5px;color:#fff}
+.metro-stn{font-family:var(--pixel);font-size:7px;color:#fff;letter-spacing:0.07em}
+.metro-lines{display:flex;gap:3px}
+
+/* Smaller pills — 2/3 size */
+.lpill{width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--pixel);font-size:4px;color:#fff;border:1px solid rgba(255,255,255,0.2)}
+.lOR{background:#c05a00}.lSV{background:#707880}.lBL{background:#0070a8}.lGR{background:#147832}.lRD{background:#a00000}.lYL{background:#c8a000}
+
 .spip{width:5px;height:5px;border-radius:50%;background:#6ee7a0;animation:pipBreath 2.5s ease-in-out infinite}
 @keyframes pipBreath{0%,100%{opacity:1}50%{opacity:0.25}}
-.spip-lbl{font-size:8px;color:rgba(255,255,255,0.45);font-weight:500;letter-spacing:0.05em}
+.spip-row{display:flex;align-items:center;gap:5px}
+.spip-lbl{font-size:7px;color:rgba(255,255,255,0.4);letter-spacing:0.05em}
 
-/* Body */
 .metro-body{display:grid;grid-template-columns:1fr 1px 1fr;flex:1;min-height:0;background:var(--card)}
 .m-vline{background:var(--border)}
 .metro-col{display:flex;flex-direction:column;overflow:hidden}
-
-.dir-bar{padding:7px 16px;border-bottom:1px solid var(--border);background:var(--card2);display:flex;align-items:baseline;gap:8px;flex-shrink:0}
-.dir-name{font-size:10px;font-weight:700;color:var(--ink);letter-spacing:0.03em}
+.dir-bar{padding:6px 14px;border-bottom:1px solid var(--border);background:var(--card2);display:flex;align-items:baseline;gap:6px;flex-shrink:0}
+.dir-name{font-size:10px;font-weight:700;color:var(--ink)}
 .dir-sub{font-size:8px;color:var(--ink4)}
-
-.col-hdr{padding:4px 16px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:24px 1fr auto auto;gap:8px;flex-shrink:0;background:var(--card2)}
-.col-hdr span{font-size:7px;font-weight:700;letter-spacing:0.14em;color:var(--ink5);text-transform:uppercase}
-
+.col-hdr{padding:3px 14px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:20px 1fr auto auto;gap:6px;flex-shrink:0;background:var(--card2)}
+.col-hdr span{font-size:7px;font-weight:700;letter-spacing:0.12em;color:var(--ink5);text-transform:uppercase}
 .train-list{flex:1;overflow-y:auto;scrollbar-width:none}
 .train-list::-webkit-scrollbar{display:none}
-
-.train-row{display:grid;grid-template-columns:24px 1fr auto auto;align-items:center;gap:8px;padding:9px 16px;border-bottom:1px solid var(--border);transition:background 0.1s}
+.train-row{display:grid;grid-template-columns:20px 1fr auto auto;align-items:center;gap:7px;padding:8px 14px;border-bottom:1px solid var(--border);transition:background 0.1s}
 .train-row:last-child{border-bottom:none}
 .train-row:hover{background:var(--card2)}
-
-.t-line{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--pixel);font-size:5px;color:#fff;flex-shrink:0}
-.t-dest{font-size:13px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.t-cars{font-size:10px;color:var(--ink5)}
-.t-eta{font-family:var(--mono);font-size:14px;text-align:right;white-space:nowrap;min-width:50px;color:var(--ink2)}
+.t-line{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--pixel);font-size:4px;color:#fff;flex-shrink:0}
+.t-dest{font-size:12px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t-cars{font-size:9px;color:var(--ink5)}
+.t-eta{font-family:var(--mono);font-size:13px;text-align:right;white-space:nowrap;min-width:46px;color:var(--ink2)}
 .eta-arr{color:var(--green);font-weight:700;animation:etaPulse 0.8s ease-in-out infinite}
 @keyframes etaPulse{0%,100%{opacity:1}50%{opacity:0.4}}
 .eta-soon{color:var(--orange-line);font-weight:600}
-
-.no-trains,.loading-row{display:flex;align-items:center;gap:7px;padding:14px 16px;font-size:12px;color:var(--ink4)}
-.ldot{width:5px;height:5px;border-radius:50%;background:var(--ink5);animation:dotBlink 1.2s ease-in-out infinite}
+.no-trains,.loading-row{display:flex;align-items:center;gap:6px;padding:12px 14px;font-size:11px;color:var(--ink4)}
+.ldot{width:4px;height:4px;border-radius:50%;background:var(--ink5);animation:dotBlink 1.2s ease-in-out infinite}
 .ldot:nth-child(2){animation-delay:.4s}.ldot:nth-child(3){animation-delay:.8s}
 @keyframes dotBlink{0%,100%{opacity:1}50%{opacity:0.1}}
+.metro-foot{padding:4px 14px;background:var(--card2);border-top:1px solid var(--border);border-radius:0 0 var(--r) var(--r);display:flex;justify-content:space-between;flex-shrink:0}
+.metro-foot span{font-size:7px;color:var(--ink5);letter-spacing:0.04em}
 
-.metro-foot{padding:5px 16px;background:var(--card2);border-top:1px solid var(--border);border-radius:0 0 var(--r) var(--r);display:flex;justify-content:space-between;flex-shrink:0}
-.metro-foot span{font-size:8px;color:var(--ink5);letter-spacing:0.04em}
-
-/* ══════════════════════════════
-   ROW 3 — BOTTOM STRIP
-   countdown | quote | news ticker
-══════════════════════════════ */
-.bottom-bar{
-  display:grid;
-  grid-template-columns:auto 1px 1fr 1px auto;
-  gap:0;
-  align-items:stretch;
-}
-.b-vline{width:1px;background:var(--border);margin:8px 0}
-
-/* Countdown */
+/* ── COUNTDOWN (1/3 of middle row) ── */
 .countdown-card{
-  padding:10px 20px;
-  display:flex;flex-direction:column;justify-content:center;gap:5px;
-  min-width:210px;
+  padding:16px 18px;display:flex;flex-direction:column;justify-content:center;gap:10px;
 }
-.cd-label{font-size:7px;font-weight:700;letter-spacing:0.22em;color:var(--ink5);text-transform:uppercase;margin-bottom:2px}
-.cd-event{font-size:11px;font-weight:600;color:var(--ink2);margin-bottom:4px}
+.cd-label{font-size:7px;font-weight:700;letter-spacing:0.22em;color:var(--ink5);text-transform:uppercase}
+.cd-event{font-size:12px;font-weight:600;color:var(--ink2);line-height:1.4}
 .cd-nums{display:flex;gap:6px;align-items:flex-end}
 .cd-unit{display:flex;flex-direction:column;align-items:center;gap:1px}
-.cd-n{font-family:var(--mono);font-size:26px;color:var(--ink);line-height:1;letter-spacing:-0.02em}
+.cd-n{font-family:var(--mono);font-size:30px;color:var(--ink);line-height:1;letter-spacing:-0.02em}
 .cd-u{font-size:6px;font-weight:700;letter-spacing:0.14em;color:var(--ink5);text-transform:uppercase}
-.cd-sep{font-family:var(--mono);font-size:20px;color:var(--ink5);margin-bottom:5px}
+.cd-sep{font-family:var(--mono);font-size:22px;color:var(--ink5);margin-bottom:6px}
+.cd-divider{height:1px;background:var(--border)}
+.cd-sub{font-size:9px;color:var(--ink4);font-style:italic}
 
-/* Quote */
+/* ── BOTTOM: quote full width + news ── */
+.bottom-bar{display:grid;grid-template-rows:auto auto;gap:var(--gap)}
+
 .quote-card{
-  padding:10px 22px;
-  display:flex;flex-direction:column;justify-content:center;gap:3px;
+  padding:10px 20px;display:flex;align-items:center;gap:16px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);
 }
-.q-text{font-size:11px;color:var(--ink3);line-height:1.55;font-style:italic}
-.q-author{font-size:9px;font-weight:600;color:var(--ink5);margin-top:3px;letter-spacing:0.04em}
+.q-mark{font-family:var(--serif);font-size:36px;color:var(--ink5);line-height:1;flex-shrink:0;margin-top:-4px}
+.q-body{display:flex;flex-direction:column;gap:2px;min-width:0}
+.q-text{font-size:11px;color:var(--ink3);line-height:1.5;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q-author{font-size:9px;font-weight:600;color:var(--ink5);letter-spacing:0.04em}
 
-/* News ticker */
-.news-card{
+.news-bar{
   display:flex;align-items:center;overflow:hidden;
-  min-width:0;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);
 }
-.news-tag{
-  background:var(--ink);color:var(--paper);
-  font-size:8px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
-  padding:8px 14px;white-space:nowrap;flex-shrink:0;
-  display:flex;align-items:center;gap:5px;
-  border-radius:var(--r) 0 0 var(--r);
-  align-self:stretch;
-}
-.news-blink{width:5px;height:5px;border-radius:50%;background:#fff;opacity:0.5;animation:dotBlink 2s ease-in-out infinite}
+.news-tag{background:var(--ink);color:var(--paper);font-size:7px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;padding:7px 12px;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:5px;border-radius:var(--r) 0 0 var(--r);align-self:stretch}
+.news-blink{width:4px;height:4px;border-radius:50%;background:#fff;opacity:0.5;animation:dotBlink 2s ease-in-out infinite}
 .news-mask{flex:1;overflow:hidden;position:relative}
-.news-mask::before,.news-mask::after{
-  content:'';position:absolute;top:0;bottom:0;width:24px;z-index:2;pointer-events:none;
-}
-.news-mask::before{left:0;background:linear-gradient(to right,var(--paper),transparent)}
-.news-mask::after{right:0;background:linear-gradient(to left,var(--paper),transparent)}
-.news-ticker{
-  display:flex;white-space:nowrap;align-items:center;
-  padding:0 20px;gap:0;
-  animation:tickerScroll 80s linear infinite;
-}
+.news-mask::before,.news-mask::after{content:'';position:absolute;top:0;bottom:0;width:20px;z-index:2;pointer-events:none}
+.news-mask::before{left:0;background:linear-gradient(to right,var(--card),transparent)}
+.news-mask::after{right:0;background:linear-gradient(to left,var(--card),transparent)}
+.news-ticker{display:flex;white-space:nowrap;align-items:center;padding:0 16px;animation:tickerScroll 90s linear infinite}
 .news-ticker:hover{animation-play-state:paused}
 @keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.news-item{
-  font-size:11px;color:var(--ink3);
-  padding:8px 24px;border-left:1px solid var(--border);
-  cursor:default;transition:color 0.15s;white-space:nowrap;
-}
+.news-item{font-size:11px;color:var(--ink3);padding:7px 20px;border-left:1px solid var(--border);cursor:default;transition:color 0.15s;white-space:nowrap}
 .news-item:first-child{border-left:none}
 .news-item:hover{color:var(--ink)}
-.news-ph{font-size:10px;color:var(--ink5);padding:8px 20px}
-
-/* wrap bottom row cards */
-.countdown-card,.quote-card,.news-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  box-shadow:var(--shadow);
-}
-.countdown-card{border-radius:var(--r)}
-.quote-card{border-radius:var(--r)}
-.news-card{border-radius:var(--r);flex:1}
-
-.bottom-bar{
-  display:grid;
-  grid-template-columns:auto var(--gap) 1fr var(--gap) auto;
-  gap:0;
-  align-items:stretch;
-}
-/* override the vline for bottom bar spacing */
-.bottom-bar .b-vline{width:var(--gap);background:transparent}
+.news-src{font-size:9px;font-weight:700;color:var(--ink5);margin-right:6px}
+.news-ph{font-size:10px;color:var(--ink5);padding:7px 16px}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .top-bar{animation:fadeUp 0.4s ease both}
-.metro-card{animation:fadeUp 0.4s 0.06s ease both}
+.mid-row{animation:fadeUp 0.4s 0.06s ease both}
 .bottom-bar{animation:fadeUp 0.4s 0.12s ease both}
 </style>
 </head>
 <body>
 <div class="dash">
 
-  <!-- ══ ROW 1: CLOCKS + WEATHER ══ -->
+  <!-- ROW 1: CLOCKS + WEATHER -->
   <div class="top-bar">
-
-    <!-- Arlington / Local -->
     <div class="card clock-card primary">
       <div class="clock-flag">🇺🇸</div>
-      <div class="clock-top">
-        <div class="clock-label">Local Time</div>
-        <div class="clock-city">Arlington, VA</div>
-      </div>
+      <div><div class="clock-label">Local Time</div><div class="clock-city">Arlington, VA</div></div>
       <div>
-        <div class="clock-time">
-          <span id="loc-h">12</span><span class="clock-colon">:</span><span id="loc-m">00</span><span class="clock-ampm" id="loc-ap">AM</span>
-        </div>
+        <div class="clock-time"><span id="loc-h">12</span><span class="clock-colon">:</span><span id="loc-m">00</span><span class="clock-ampm" id="loc-ap">AM</span></div>
         <div class="clock-date" id="loc-date">Saturday · April 25</div>
       </div>
     </div>
 
-    <!-- India -->
     <div class="card clock-card secondary">
       <div class="clock-flag">🇮🇳</div>
-      <div class="clock-top">
-        <div class="clock-label">India</div>
-        <div class="clock-city">Mumbai / Delhi</div>
-      </div>
+      <div><div class="clock-label">India</div><div class="clock-city">Mumbai / Delhi</div></div>
       <div>
-        <div class="clock-time">
-          <span id="ind-h">--</span><span class="clock-colon">:</span><span id="ind-m">--</span><span class="clock-ampm" id="ind-ap">AM</span>
-        </div>
+        <div class="clock-time"><span id="ind-h">--</span><span class="clock-colon">:</span><span id="ind-m">--</span><span class="clock-ampm" id="ind-ap">AM</span></div>
         <div class="clock-date" id="ind-date">--</div>
       </div>
     </div>
 
-    <!-- Indonesia -->
     <div class="card clock-card secondary">
       <div class="clock-flag">🇮🇩</div>
-      <div class="clock-top">
-        <div class="clock-label">Indonesia</div>
-        <div class="clock-city">Jakarta</div>
-      </div>
+      <div><div class="clock-label">Indonesia</div><div class="clock-city">Jakarta</div></div>
       <div>
-        <div class="clock-time">
-          <span id="jak-h">--</span><span class="clock-colon">:</span><span id="jak-m">--</span><span class="clock-ampm" id="jak-ap">AM</span>
-        </div>
+        <div class="clock-time"><span id="jak-h">--</span><span class="clock-colon">:</span><span id="jak-m">--</span><span class="clock-ampm" id="jak-ap">AM</span></div>
         <div class="clock-date" id="jak-date">--</div>
       </div>
     </div>
 
-    <!-- Separator -->
     <div class="top-vline"></div>
 
-    <!-- Weather -->
+    <!-- Weather — Apple style -->
     <div class="card weather-card">
-      <div class="w-now">
-        <div class="w-icon" id="wi">⛅</div>
-        <div class="w-temp" id="wt">--°</div>
-        <div class="w-cond" id="wdesc">--</div>
-      </div>
-      <div class="w-vdiv"></div>
-      <div class="w-stats">
-        <div class="ws"><span class="ws-l">Feels Like</span><span class="ws-v" id="feels">--</span></div>
-        <div class="ws"><span class="ws-l">Humidity</span><span class="ws-v" id="humid">--</span></div>
-        <div class="ws"><span class="ws-l">Wind</span><span class="ws-v" id="wind">--</span></div>
-        <div class="ws"><span class="ws-l">UV</span><span class="ws-v" id="uv">--</span></div>
-      </div>
-      <div class="w-vdiv"></div>
-      <div class="w-hourly">
-        <div class="wh-lbl">Next few hours</div>
-        <div class="hourly-row" id="hourly"></div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ══ ROW 2: METRO ══ -->
-  <div class="card metro-card">
-    <div class="metro-banner">
-      <div class="metro-banner-left">
-        <div class="wmata-hex"><span class="wmata-m">M</span></div>
-        <div class="metro-stn">BALLSTON-MU</div>
-        <div class="metro-lines">
-          <div class="lpill lOR">OR</div>
-          <div class="lpill lSV">SV</div>
+      <div class="wx-current">
+        <div class="wx-left">
+          <div class="wx-emoji" id="wx-emoji">⛅</div>
+          <div class="wx-temp" id="wx-temp">--°</div>
+          <div class="wx-desc" id="wx-desc">--</div>
+        </div>
+        <div class="wx-middle">
+          <div class="wx-hl">H:<span id="wx-hi">--°</span> &nbsp; L:<span id="wx-lo">--°</span></div>
+          <div class="wx-summary" id="wx-summary">Loading weather…</div>
+        </div>
+        <div class="wx-stats">
+          <div class="ws"><span class="ws-l">Feels Like</span><span class="ws-v" id="feels">--</span></div>
+          <div class="ws"><span class="ws-l">Humidity</span><span class="ws-v" id="humid">--</span></div>
+          <div class="ws"><span class="ws-l">Wind</span><span class="ws-v" id="wind">--</span></div>
+          <div class="ws"><span class="ws-l">UV</span><span class="ws-v" id="uv">--</span></div>
         </div>
       </div>
-      <div class="metro-banner-right">
-        <div class="spip" id="sPip"></div>
-        <div class="spip-lbl">Live</div>
-      </div>
-    </div>
-
-    <div class="metro-body">
-      <div class="metro-col">
-        <div class="dir-bar">
-          <span class="dir-name">← Toward DC</span>
-          <span class="dir-sub">New Carrollton · Largo</span>
-        </div>
-        <div class="col-hdr"><span></span><span>Destination</span><span>Car</span><span>Min</span></div>
-        <div class="train-list" id="col-dc">
-          <div class="loading-row"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div><span>Loading</span></div>
-        </div>
-      </div>
-      <div class="m-vline"></div>
-      <div class="metro-col">
-        <div class="dir-bar">
-          <span class="dir-name">Toward Virginia →</span>
-          <span class="dir-sub">Vienna · Ashburn</span>
-        </div>
-        <div class="col-hdr"><span></span><span>Destination</span><span>Car</span><span>Min</span></div>
-        <div class="train-list" id="col-va">
-          <div class="loading-row"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div><span>Loading</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="metro-foot">
-      <span>WMATA · Ballston-MU (K04) · Arlington, VA</span>
-      <span>Updated <span id="mts">--:--</span></span>
+      <div class="wx-hourly" id="hourly"></div>
     </div>
   </div>
 
-  <!-- ══ ROW 3: COUNTDOWN + QUOTE + NEWS ══ -->
-  <div class="bottom-bar">
+  <!-- ROW 2: METRO (2/3) + COUNTDOWN (1/3) -->
+  <div class="mid-row">
 
-    <div class="countdown-card">
+    <div class="card metro-card">
+      <div class="metro-banner">
+        <div class="metro-banner-left">
+          <div class="wmata-hex"><span class="wmata-m">M</span></div>
+          <div class="metro-stn">BALLSTON-MU</div>
+          <div class="metro-lines">
+            <div class="lpill lOR">OR</div>
+            <div class="lpill lSV">SV</div>
+          </div>
+        </div>
+        <div class="spip-row"><div class="spip" id="sPip"></div><div class="spip-lbl">Live</div></div>
+      </div>
+      <div class="metro-body">
+        <div class="metro-col">
+          <div class="dir-bar"><span class="dir-name">← Toward DC</span><span class="dir-sub">New Carrollton · Largo</span></div>
+          <div class="col-hdr"><span></span><span>Destination</span><span>Car</span><span>Min</span></div>
+          <div class="train-list" id="col-dc"><div class="loading-row"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div><span>Loading</span></div></div>
+        </div>
+        <div class="m-vline"></div>
+        <div class="metro-col">
+          <div class="dir-bar"><span class="dir-name">Toward Virginia →</span><span class="dir-sub">Vienna · Ashburn</span></div>
+          <div class="col-hdr"><span></span><span>Destination</span><span>Car</span><span>Min</span></div>
+          <div class="train-list" id="col-va"><div class="loading-row"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div><span>Loading</span></div></div>
+        </div>
+      </div>
+      <div class="metro-foot">
+        <span>WMATA · Ballston-MU (K04) · Arlington, VA</span>
+        <span>Updated <span id="mts">--:--</span></span>
+      </div>
+    </div>
+
+    <div class="card countdown-card">
       <div class="cd-label">Countdown</div>
-      <div class="cd-event">🛬 Parents arrive · DC</div>
+      <div class="cd-event">🛬 Parents arrive in DC</div>
       <div class="cd-nums">
         <div class="cd-unit"><span class="cd-n" id="cd-d">--</span><span class="cd-u">days</span></div>
         <div class="cd-sep">:</div>
@@ -455,26 +319,29 @@ body::before{
         <div class="cd-sep">:</div>
         <div class="cd-unit"><span class="cd-n" id="cd-m">--</span><span class="cd-u">min</span></div>
       </div>
+      <div class="cd-divider"></div>
+      <div class="cd-sub" id="cd-sub">May 9 · Washington DC</div>
     </div>
 
-    <div class="b-vline"></div>
+  </div>
 
+  <!-- ROW 3: QUOTE + NEWS -->
+  <div class="bottom-bar">
     <div class="quote-card">
-      <div class="q-text" id="q-text">Loading…</div>
-      <div class="q-author" id="q-author"></div>
+      <div class="q-mark">"</div>
+      <div class="q-body">
+        <div class="q-text" id="q-text">Loading today's quote…</div>
+        <div class="q-author" id="q-author"></div>
+      </div>
     </div>
-
-    <div class="b-vline"></div>
-
-    <div class="news-card">
+    <div class="news-bar">
       <div class="news-tag"><div class="news-blink"></div>News</div>
       <div class="news-mask">
         <div class="news-ticker" id="newsTicker">
-          <span class="news-ph">Add your free NewsAPI key at newsapi.org → paste into CFG.newsApiKey below to enable live headlines</span>
+          <span class="news-ph">Loading headlines…</span>
         </div>
       </div>
     </div>
-
   </div>
 
 </div>
@@ -484,39 +351,65 @@ const CFG={
   stationCode:'K04',
   lat:38.8820,lon:-77.1114,
   metroRefresh:60,
-  newsApiKey:'',
+  newsApiKey:'2a29a01069514782bc07939ef3cb3a21',
   countdownTarget:new Date('2026-05-09T00:00:00'),
 };
 
+// News config — prioritized sources + category rotation
+const NEWS_SOURCES='bbc-news,reuters,associated-press,the-washington-post';
+const NEWS_QUERIES=['business','technology','politics','world'];
+let newsQueryIdx=0;
+
 const WMO={0:'Clear Sky',1:'Mainly Clear',2:'Partly Cloudy',3:'Overcast',45:'Fog',48:'Icy Fog',51:'Light Drizzle',53:'Drizzle',55:'Heavy Drizzle',61:'Light Rain',63:'Rain',65:'Heavy Rain',71:'Light Snow',73:'Snow',75:'Heavy Snow',80:'Rain Showers',81:'Showers',82:'Heavy Showers',95:'Thunderstorm',96:'Thunderstorm',99:'Thunderstorm'};
-const ICO={0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',48:'🌫',51:'🌦',53:'🌧',55:'🌧',61:'🌦',63:'🌧',65:'🌧',71:'🌨',73:'❄️',75:'❄️',80:'🌦',81:'🌧',82:'⛈',95:'⛈',96:'⛈',99:'⛈'};
+const ICO={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌦️',63:'🌧️',65:'🌧️',71:'🌨️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
+
+// Weather background classes
+function wxClass(code,isDay){
+  if(code===0||code===1)return isDay?'wx-clear-day':'wx-clear-night';
+  if(code===2||code===3)return 'wx-cloud';
+  if(code>=45&&code<=48)return 'wx-cloud';
+  if(code>=51&&code<=67||code>=80&&code<=82)return 'wx-rain';
+  if(code>=71&&code<=77)return 'wx-snow';
+  if(code>=95)return 'wx-storm';
+  return '';
+}
+
+// Weather summaries
+function wxSummary(code,feelsLike,windSpeed){
+  const w=Math.round(windSpeed);
+  const f=Math.round(feelsLike);
+  if(code>=95)return`Thunderstorms active. Feels like ${f}°. Stay indoors if possible.`;
+  if(code>=80&&code<=82)return`Rain showers likely. Feels like ${f}°. Wind at ${w} km/h.`;
+  if(code>=61&&code<=65)return`Rainy conditions. Grab an umbrella. Feels like ${f}°.`;
+  if(code>=51&&code<=55)return`Light drizzle. Feels like ${f}°. Wind ${w} km/h.`;
+  if(code>=71&&code<=77)return`Snowy conditions. Feels like ${f}°. Watch for ice.`;
+  if(code===3)return`Overcast skies. Feels like ${f}°. Wind ${w} km/h.`;
+  if(code===2)return`Partly cloudy. Feels like ${f}°. A pleasant day overall.`;
+  if(code===0||code===1)return`Clear skies. Feels like ${f}°. UV could be high — check before heading out.`;
+  return`Feels like ${f}°. Wind at ${w} km/h.`;
+}
+
 const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const MONS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const pad=n=>String(n).padStart(2,'0');
 const $=id=>document.getElementById(id);
 
-function fmtClock(date,tz){
-  const d=new Date(date.toLocaleString('en-US',{timeZone:tz}));
+function fmtClock(now,tz){
+  const d=new Date(now.toLocaleString('en-US',{timeZone:tz}));
   const h=d.getHours(),m=d.getMinutes();
-  return{h:h%12||12,m:pad(m),ap:h>=12?'PM':'AM',
-    date:DAYS[d.getDay()]+' · '+MONS[d.getMonth()]+' '+d.getDate()};
+  return{h:h%12||12,m:pad(m),ap:h>=12?'PM':'AM',date:DAYS[d.getDay()]+' · '+MONS[d.getMonth()]+' '+d.getDate()};
 }
 
 function tick(){
   const now=new Date();
-
-  // Local
   const lh=now.getHours(),lm=now.getMinutes();
-  $('loc-h').textContent=lh%12||12;
-  $('loc-m').textContent=pad(lm);
+  $('loc-h').textContent=lh%12||12;$('loc-m').textContent=pad(lm);
   $('loc-ap').textContent=lh>=12?'PM':'AM';
   $('loc-date').textContent=DAYS[now.getDay()]+' · '+MONS[now.getMonth()]+' '+now.getDate();
 
-  // India (IST = Asia/Kolkata)
   const ind=fmtClock(now,'Asia/Kolkata');
   $('ind-h').textContent=ind.h;$('ind-m').textContent=ind.m;$('ind-ap').textContent=ind.ap;$('ind-date').textContent=ind.date;
 
-  // Jakarta (WIB = Asia/Jakarta)
   const jak=fmtClock(now,'Asia/Jakarta');
   $('jak-h').textContent=jak.h;$('jak-m').textContent=jak.m;$('jak-ap').textContent=jak.ap;$('jak-date').textContent=jak.date;
 
@@ -532,33 +425,84 @@ function tick(){
 }
 setInterval(tick,1000);tick();
 
-// Weather
+// WEATHER
 async function fetchWeather(){
   try{
-    const d=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+CFG.lat+'&longitude='+CFG.lon+'&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,relative_humidity_2m,uv_index&hourly=temperature_2m,weather_code,precipitation_probability&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&forecast_days=1').then(r=>r.json());
+    const d=await fetch(
+      'https://api.open-meteo.com/v1/forecast?latitude='+CFG.lat+'&longitude='+CFG.lon
+      +'&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,relative_humidity_2m,uv_index'
+      +'&hourly=temperature_2m,apparent_temperature,weather_code,precipitation_probability,is_day'
+      +'&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset'
+      +'&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&forecast_days=2'
+    ).then(r=>r.json());
+
     const c=d.current,code=c.weather_code;
-    $('wi').textContent=ICO[code]||'🌡';
-    $('wt').textContent=Math.round(c.temperature_2m)+'°';
-    $('wdesc').textContent=WMO[code]||'Unknown';
+    const nowH=new Date().getHours();
+    const isDay=d.hourly.is_day[nowH]===1;
+
+    // Background theme
+    document.body.className=wxClass(code,isDay);
+
+    $('wx-emoji').textContent=ICO[code]||'🌡️';
+    $('wx-temp').textContent=Math.round(c.temperature_2m)+'°';
+    $('wx-desc').textContent=WMO[code]||'Unknown';
+    $('wx-hi').textContent=Math.round(d.daily.temperature_2m_max[0])+'°';
+    $('wx-lo').textContent=Math.round(d.daily.temperature_2m_min[0])+'°';
+    $('wx-summary').textContent=wxSummary(code,c.apparent_temperature,c.wind_speed_10m);
     $('feels').textContent=Math.round(c.apparent_temperature)+'°C';
     $('humid').textContent=c.relative_humidity_2m+'%';
     $('wind').textContent=Math.round(c.wind_speed_10m)+' km/h';
     $('uv').textContent=Math.round(c.uv_index);
-    const nowH=new Date().getHours(),box=$('hourly');
+
+    // Hourly — wrap midnight into next day, show 12 hours
+    const box=$('hourly');
     box.innerHTML='';
-    for(let i=0;i<8;i++){
-      const idx=nowH+i;if(idx>=d.hourly.temperature_2m.length)break;
-      const t=Math.round(d.hourly.temperature_2m[idx]),wc=d.hourly.weather_code[idx],pr=d.hourly.precipitation_probability[idx],hr=idx%24;
+    const sunrise=new Date(d.daily.sunrise[0]);
+    const sunset=new Date(d.daily.sunset[0]);
+    const sunrise1=d.daily.sunrise[1]?new Date(d.daily.sunrise[1]):null;
+
+    // Build 12 slots from now, wrapping across days
+    const totalHours=d.hourly.temperature_2m.length; // 48h
+    let slotsAdded=0;
+
+    for(let i=0;i<totalHours&&slotsAdded<12;i++){
+      const idx=nowH+i;
+      if(idx>=totalHours)break;
+
+      const slotDate=new Date();
+      slotDate.setHours(idx%24,0,0,0);
+      if(idx>=24)slotDate.setDate(slotDate.getDate()+Math.floor(idx/24));
+
+      const t=Math.round(d.hourly.temperature_2m[idx]);
+      const fl=Math.round(d.hourly.apparent_temperature[idx]);
+      const wc=d.hourly.weather_code[idx];
+      const pr=d.hourly.precipitation_probability[idx];
+      const hr=idx%24;
       const lbl=i===0?'Now':(hr<12?hr+'am':hr===12?'12pm':(hr-12)+'pm');
+
+      // Check sunrise/sunset proximity (within 30min)
+      let special='';
+      if(Math.abs(slotDate-sunrise)<30*60*1000)special='sunrise';
+      else if(Math.abs(slotDate-sunset)<30*60*1000)special='sunset';
+      else if(sunrise1&&Math.abs(slotDate-sunrise1)<30*60*1000)special='sunrise';
+
       const el=document.createElement('div');
-      el.className='hb'+(i===0?' now':'');
-      el.innerHTML='<div class="hb-lbl">'+lbl+'</div><div class="hb-ico">'+(ICO[wc]||'🌡')+'</div><div class="hb-tmp">'+t+'°</div><div class="hb-pct">'+(pr>10?pr+'%':'')+'</div>';
+      el.className='hb'+(i===0?' now':'')+(special?' '+special:'');
+
+      if(special==='sunrise'){
+        el.innerHTML='<div class="hb-lbl">Sunrise</div><div class="hb-ico">🌅</div><div class="hb-tmp">'+t+'°</div><div class="hb-fl">FL '+fl+'°</div><div class="hb-pct"></div>';
+      }else if(special==='sunset'){
+        el.innerHTML='<div class="hb-lbl">Sunset</div><div class="hb-ico">🌇</div><div class="hb-tmp">'+t+'°</div><div class="hb-fl">FL '+fl+'°</div><div class="hb-pct"></div>';
+      }else{
+        el.innerHTML='<div class="hb-lbl">'+lbl+'</div><div class="hb-ico">'+(ICO[wc]||'🌡️')+'</div><div class="hb-tmp">'+t+'°</div><div class="hb-fl">FL '+fl+'°</div><div class="hb-pct">'+(pr>10?pr+'%':'')+'</div>';
+      }
       box.appendChild(el);
+      slotsAdded++;
     }
   }catch(e){console.warn('wx',e)}
 }
 
-// Metro
+// METRO
 function buildRows(trains,id){
   const col=$(id);
   if(!trains.length){col.innerHTML='<div class="no-trains">No trains scheduled</div>';return}
@@ -579,9 +523,8 @@ function buildRows(trains,id){
 async function fetchMetro(){
   try{
     const data=await fetch('https://api.wmata.com/StationPrediction.svc/json/GetPrediction/'+CFG.stationCode,{headers:{'api_key':CFG.wmataKey}}).then(r=>r.json());
-    const trains=data.Trains||[];
-    buildRows(trains.filter(t=>t.Group==='1'),'col-dc');
-    buildRows(trains.filter(t=>t.Group==='2'),'col-va');
+    buildRows((data.Trains||[]).filter(t=>t.Group==='1'),'col-dc');
+    buildRows((data.Trains||[]).filter(t=>t.Group==='2'),'col-va');
     const n=new Date();$('mts').textContent=pad(n.getHours())+':'+pad(n.getMinutes());
     $('sPip').style.background='#6ee7a0';
   }catch(e){
@@ -590,7 +533,7 @@ async function fetchMetro(){
   }
 }
 
-// Quote
+// QUOTE
 async function fetchQuote(){
   try{
     const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent('https://zenquotes.io/api/today')).then(r=>r.json());
@@ -602,16 +545,33 @@ async function fetchQuote(){
   }
 }
 
-// News
+// NEWS — rotates through topics, uses prioritized sources
 async function fetchNews(){
-  if(!CFG.newsApiKey)return;
+  const query=NEWS_QUERIES[newsQueryIdx%NEWS_QUERIES.length];
+  newsQueryIdx++;
   try{
-    const r=await fetch('https://newsapi.org/v2/top-headlines?country=us&pageSize=12&apiKey='+CFG.newsApiKey).then(r=>r.json());
-    if(r.articles&&r.articles.length){
-      const items=r.articles.filter(a=>a.title&&!a.title.includes('[Removed]')).slice(0,10);
-      const all=[...items,...items];
-      $('newsTicker').innerHTML=all.map(a=>'<span class="news-item">'+a.title+'</span>').join('');
-    }
+    // Fetch from prioritized sources + query keyword
+    const [srcRes,qRes]=await Promise.all([
+      fetch('https://newsapi.org/v2/top-headlines?sources='+NEWS_SOURCES+'&pageSize=8&apiKey='+CFG.newsApiKey).then(r=>r.json()),
+      fetch('https://newsapi.org/v2/everything?q='+query+'&language=en&sortBy=publishedAt&pageSize=6&apiKey='+CFG.newsApiKey).then(r=>r.json())
+    ]);
+
+    const srcArticles=(srcRes.articles||[]).filter(a=>a.title&&!a.title.includes('[Removed]'));
+    const qArticles=(qRes.articles||[]).filter(a=>a.title&&!a.title.includes('[Removed]'));
+
+    // Merge: prioritized sources first, then topic query
+    const seen=new Set();
+    const merged=[];
+    [...srcArticles,...qArticles].forEach(a=>{
+      if(!seen.has(a.title)){seen.add(a.title);merged.push(a);}
+    });
+
+    const items=merged.slice(0,12);
+    const all=[...items,...items]; // double for seamless loop
+    $('newsTicker').innerHTML=all.map(a=>{
+      const src=a.source&&a.source.name?'<span class="news-src">'+a.source.name.replace('The Washington Post','WashPost').replace('Associated Press','AP')+'</span>':'';
+      return'<span class="news-item">'+src+a.title+'</span>';
+    }).join('');
   }catch(e){console.warn('news',e)}
 }
 
@@ -619,6 +579,7 @@ fetchWeather();fetchMetro();fetchQuote();fetchNews();
 setInterval(fetchWeather,10*60*1000);
 setInterval(fetchMetro,CFG.metroRefresh*1000);
 setInterval(fetchQuote,60*60*1000);
+// Rotate news topic every 15 min
 setInterval(fetchNews,15*60*1000);
 </script>
 </body>

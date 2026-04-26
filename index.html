@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Dashboard">
 <title>Home Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Figtree:wght@300;400;500;600;700&family=Press+Start+2P&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
@@ -57,8 +60,8 @@ body.wx-storm{background:linear-gradient(160deg,#2c2c38,#3c3844);--paper:#2c2c38
 .clock-city{font-size:10px;font-weight:600;color:var(--ink2);margin-top:2px}
 .clock-card.primary .clock-time{font-family:var(--serif);font-size:clamp(44px,5vw,64px);line-height:1;color:var(--ink)}
 .clock-card.secondary .clock-time{font-family:var(--serif);font-size:clamp(28px,3.2vw,42px);line-height:1;color:var(--ink)}
-.clock-colon{animation:blinkColon 1s step-end infinite}
-@keyframes blinkColon{0%,100%{opacity:1}50%{opacity:0.08}}
+/* Stationary colons — no blink */
+.clock-colon{opacity:1}
 .clock-ampm{font-family:var(--body);font-weight:400;color:var(--ink3);vertical-align:middle;margin-left:3px}
 .clock-card.primary .clock-ampm{font-size:0.32em;letter-spacing:0.06em}
 .clock-card.secondary .clock-ampm{font-size:0.36em;letter-spacing:0.05em}
@@ -77,7 +80,7 @@ body.wx-storm{background:linear-gradient(160deg,#2c2c38,#3c3844);--paper:#2c2c38
   border-bottom:1px solid var(--border);
 }
 .wx-left{display:flex;flex-direction:column;align-items:center;gap:2px}
-.wx-emoji{font-size:40px;line-height:1;transition:all 0.6s ease}
+.wx-emoji{font-size:40px;line-height:1}
 .wx-temp{font-family:var(--serif);font-size:42px;color:var(--ink);line-height:1.05}
 .wx-desc{font-size:8px;font-weight:700;letter-spacing:0.14em;color:var(--ink4);text-transform:uppercase;text-align:center;margin-top:2px}
 
@@ -95,8 +98,7 @@ body.wx-storm{background:linear-gradient(160deg,#2c2c38,#3c3844);--paper:#2c2c38
 .wx-hourly{
   display:flex;align-items:stretch;overflow-x:auto;
   scrollbar-width:none;flex-shrink:0;
-  padding:0;
-  background:var(--card2);
+  padding:0;background:var(--card2);
 }
 .wx-hourly::-webkit-scrollbar{display:none}
 
@@ -115,12 +117,10 @@ body.wx-storm{background:linear-gradient(160deg,#2c2c38,#3c3844);--paper:#2c2c38
 .hb-tmp{font-family:var(--mono);font-size:13px;color:var(--ink);font-weight:500}
 .hb-fl{font-size:8px;color:var(--ink4)}
 .hb-pct{font-size:8px;font-weight:600;color:#1e6bb5}
-
-/* sunrise/sunset special */
 .hb.sunrise .hb-ico,.hb.sunset .hb-ico{font-size:15px}
 .hb.sunrise .hb-lbl,.hb.sunset .hb-lbl{color:var(--orange-line);font-weight:700}
 
-/* ── METRO (2/3 of middle row) ── */
+/* ── METRO (2/3) + COUNTDOWN (1/3) ── */
 .mid-row{display:grid;grid-template-columns:2fr 1fr;gap:var(--gap)}
 
 .metro-card{display:flex;flex-direction:column;overflow:hidden}
@@ -130,11 +130,8 @@ body.wx-storm{background:linear-gradient(160deg,#2c2c38,#3c3844);--paper:#2c2c38
 .wmata-m{font-family:var(--pixel);font-size:5px;color:#fff}
 .metro-stn{font-family:var(--pixel);font-size:7px;color:#fff;letter-spacing:0.07em}
 .metro-lines{display:flex;gap:3px}
-
-/* Smaller pills — 2/3 size */
 .lpill{width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--pixel);font-size:4px;color:#fff;border:1px solid rgba(255,255,255,0.2)}
 .lOR{background:#c05a00}.lSV{background:#707880}.lBL{background:#0070a8}.lGR{background:#147832}.lRD{background:#a00000}.lYL{background:#c8a000}
-
 .spip{width:5px;height:5px;border-radius:50%;background:#6ee7a0;animation:pipBreath 2.5s ease-in-out infinite}
 @keyframes pipBreath{0%,100%{opacity:1}50%{opacity:0.25}}
 .spip-row{display:flex;align-items:center;gap:5px}
@@ -167,10 +164,8 @@ body.wx-storm{background:linear-gradient(160deg,#2c2c38,#3c3844);--paper:#2c2c38
 .metro-foot{padding:4px 14px;background:var(--card2);border-top:1px solid var(--border);border-radius:0 0 var(--r) var(--r);display:flex;justify-content:space-between;flex-shrink:0}
 .metro-foot span{font-size:7px;color:var(--ink5);letter-spacing:0.04em}
 
-/* ── COUNTDOWN (1/3 of middle row) ── */
-.countdown-card{
-  padding:16px 18px;display:flex;flex-direction:column;justify-content:center;gap:10px;
-}
+/* Countdown */
+.countdown-card{padding:16px 18px;display:flex;flex-direction:column;justify-content:center;gap:10px}
 .cd-label{font-size:7px;font-weight:700;letter-spacing:0.22em;color:var(--ink5);text-transform:uppercase}
 .cd-event{font-size:12px;font-weight:600;color:var(--ink2);line-height:1.4}
 .cd-nums{display:flex;gap:6px;align-items:flex-end}
@@ -181,17 +176,8 @@ body.wx-storm{background:linear-gradient(160deg,#2c2c38,#3c3844);--paper:#2c2c38
 .cd-divider{height:1px;background:var(--border)}
 .cd-sub{font-size:9px;color:var(--ink4);font-style:italic}
 
-/* ── BOTTOM: quote full width + news ── */
+/* ── BOTTOM: news above quote ── */
 .bottom-bar{display:grid;grid-template-rows:auto auto;gap:var(--gap)}
-
-.quote-card{
-  padding:10px 20px;display:flex;align-items:center;gap:16px;
-  background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);
-}
-.q-mark{font-family:var(--serif);font-size:36px;color:var(--ink5);line-height:1;flex-shrink:0;margin-top:-4px}
-.q-body{display:flex;flex-direction:column;gap:2px;min-width:0}
-.q-text{font-size:11px;color:var(--ink3);line-height:1.5;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.q-author{font-size:9px;font-weight:600;color:var(--ink5);letter-spacing:0.04em}
 
 .news-bar{
   display:flex;align-items:center;overflow:hidden;
@@ -211,6 +197,15 @@ body.wx-storm{background:linear-gradient(160deg,#2c2c38,#3c3844);--paper:#2c2c38
 .news-item:hover{color:var(--ink)}
 .news-src{font-size:9px;font-weight:700;color:var(--ink5);margin-right:6px}
 .news-ph{font-size:10px;color:var(--ink5);padding:7px 16px}
+
+.quote-card{
+  padding:7px 20px;display:flex;align-items:center;gap:12px;
+  background:var(--card);border:1px solid var(--border);border-radius:50px;box-shadow:var(--shadow);
+}
+.q-mark{font-family:var(--serif);font-size:26px;color:var(--ink5);line-height:1;flex-shrink:0;margin-top:-2px}
+.q-body{display:flex;align-items:baseline;gap:8px;min-width:0;flex:1;flex-wrap:wrap}
+.q-text{font-size:11px;color:var(--ink3);line-height:1.45;font-style:italic;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.q-author{font-size:9px;font-weight:600;color:var(--ink5);letter-spacing:0.04em;white-space:nowrap;flex-shrink:0}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .top-bar{animation:fadeUp 0.4s ease both}
@@ -277,7 +272,6 @@ body.wx-storm{background:linear-gradient(160deg,#2c2c38,#3c3844);--paper:#2c2c38
 
   <!-- ROW 2: METRO (2/3) + COUNTDOWN (1/3) -->
   <div class="mid-row">
-
     <div class="card metro-card">
       <div class="metro-banner">
         <div class="metro-banner-left">
@@ -320,26 +314,25 @@ body.wx-storm{background:linear-gradient(160deg,#2c2c38,#3c3844);--paper:#2c2c38
         <div class="cd-unit"><span class="cd-n" id="cd-m">--</span><span class="cd-u">min</span></div>
       </div>
       <div class="cd-divider"></div>
-      <div class="cd-sub" id="cd-sub">May 9 · Washington DC</div>
+      <div class="cd-sub">May 9 · Washington DC</div>
     </div>
-
   </div>
 
-  <!-- ROW 3: QUOTE + NEWS -->
+  <!-- ROW 3: NEWS above QUOTE -->
   <div class="bottom-bar">
-    <div class="quote-card">
-      <div class="q-mark">"</div>
-      <div class="q-body">
-        <div class="q-text" id="q-text">Loading today's quote…</div>
-        <div class="q-author" id="q-author"></div>
-      </div>
-    </div>
     <div class="news-bar">
       <div class="news-tag"><div class="news-blink"></div>News</div>
       <div class="news-mask">
         <div class="news-ticker" id="newsTicker">
           <span class="news-ph">Loading headlines…</span>
         </div>
+      </div>
+    </div>
+    <div class="quote-card">
+      <div class="q-mark">"</div>
+      <div class="q-body">
+        <div class="q-text" id="q-text">Loading today's quote…</div>
+        <div class="q-author" id="q-author"></div>
       </div>
     </div>
   </div>
@@ -355,7 +348,6 @@ const CFG={
   countdownTarget:new Date('2026-05-09T00:00:00'),
 };
 
-// News config — prioritized sources + category rotation
 const NEWS_SOURCES='bbc-news,reuters,associated-press,the-washington-post';
 const NEWS_QUERIES=['business','technology','politics','world'];
 let newsQueryIdx=0;
@@ -363,7 +355,6 @@ let newsQueryIdx=0;
 const WMO={0:'Clear Sky',1:'Mainly Clear',2:'Partly Cloudy',3:'Overcast',45:'Fog',48:'Icy Fog',51:'Light Drizzle',53:'Drizzle',55:'Heavy Drizzle',61:'Light Rain',63:'Rain',65:'Heavy Rain',71:'Light Snow',73:'Snow',75:'Heavy Snow',80:'Rain Showers',81:'Showers',82:'Heavy Showers',95:'Thunderstorm',96:'Thunderstorm',99:'Thunderstorm'};
 const ICO={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌦️',63:'🌧️',65:'🌧️',71:'🌨️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
 
-// Weather background classes
 function wxClass(code,isDay){
   if(code===0||code===1)return isDay?'wx-clear-day':'wx-clear-night';
   if(code===2||code===3)return 'wx-cloud';
@@ -374,19 +365,17 @@ function wxClass(code,isDay){
   return '';
 }
 
-// Weather summaries
 function wxSummary(code,feelsLike,windSpeed){
-  const w=Math.round(windSpeed);
-  const f=Math.round(feelsLike);
-  if(code>=95)return`Thunderstorms active. Feels like ${f}°. Stay indoors if possible.`;
-  if(code>=80&&code<=82)return`Rain showers likely. Feels like ${f}°. Wind at ${w} km/h.`;
-  if(code>=61&&code<=65)return`Rainy conditions. Grab an umbrella. Feels like ${f}°.`;
-  if(code>=51&&code<=55)return`Light drizzle. Feels like ${f}°. Wind ${w} km/h.`;
-  if(code>=71&&code<=77)return`Snowy conditions. Feels like ${f}°. Watch for ice.`;
-  if(code===3)return`Overcast skies. Feels like ${f}°. Wind ${w} km/h.`;
-  if(code===2)return`Partly cloudy. Feels like ${f}°. A pleasant day overall.`;
-  if(code===0||code===1)return`Clear skies. Feels like ${f}°. UV could be high — check before heading out.`;
-  return`Feels like ${f}°. Wind at ${w} km/h.`;
+  const w=Math.round(windSpeed),f=Math.round(feelsLike);
+  if(code>=95)return'Thunderstorms active. Feels like '+f+'°. Stay indoors if possible.';
+  if(code>=80)return'Rain showers likely. Feels like '+f+'°. Wind at '+w+' km/h.';
+  if(code>=61)return'Rainy conditions. Grab an umbrella. Feels like '+f+'°.';
+  if(code>=51)return'Light drizzle. Feels like '+f+'°. Wind '+w+' km/h.';
+  if(code>=71&&code<=77)return'Snowy conditions. Feels like '+f+'°. Watch for ice.';
+  if(code===3)return'Overcast skies. Feels like '+f+'°. Wind '+w+' km/h.';
+  if(code===2)return'Partly cloudy. Feels like '+f+'°. A pleasant day overall.';
+  if(code<=1)return'Clear skies. Feels like '+f+'°. UV could be high — check before heading out.';
+  return'Feels like '+f+'°. Wind at '+w+' km/h.';
 }
 
 const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -413,7 +402,6 @@ function tick(){
   const jak=fmtClock(now,'Asia/Jakarta');
   $('jak-h').textContent=jak.h;$('jak-m').textContent=jak.m;$('jak-ap').textContent=jak.ap;$('jak-date').textContent=jak.date;
 
-  // Countdown
   const diff=CFG.countdownTarget-now;
   if(diff>0){
     $('cd-d').textContent=Math.floor(diff/86400000);
@@ -425,7 +413,6 @@ function tick(){
 }
 setInterval(tick,1000);tick();
 
-// WEATHER
 async function fetchWeather(){
   try{
     const d=await fetch(
@@ -435,14 +422,10 @@ async function fetchWeather(){
       +'&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset'
       +'&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&forecast_days=2'
     ).then(r=>r.json());
-
     const c=d.current,code=c.weather_code;
     const nowH=new Date().getHours();
     const isDay=d.hourly.is_day[nowH]===1;
-
-    // Background theme
     document.body.className=wxClass(code,isDay);
-
     $('wx-emoji').textContent=ICO[code]||'🌡️';
     $('wx-temp').textContent=Math.round(c.temperature_2m)+'°';
     $('wx-desc').textContent=WMO[code]||'Unknown';
@@ -454,67 +437,48 @@ async function fetchWeather(){
     $('wind').textContent=Math.round(c.wind_speed_10m)+' km/h';
     $('uv').textContent=Math.round(c.uv_index);
 
-    // Hourly — wrap midnight into next day, show 12 hours
-    const box=$('hourly');
-    box.innerHTML='';
+    const box=$('hourly');box.innerHTML='';
     const sunrise=new Date(d.daily.sunrise[0]);
     const sunset=new Date(d.daily.sunset[0]);
     const sunrise1=d.daily.sunrise[1]?new Date(d.daily.sunrise[1]):null;
-
-    // Build 12 slots from now, wrapping across days
-    const totalHours=d.hourly.temperature_2m.length; // 48h
+    const totalHours=d.hourly.temperature_2m.length;
     let slotsAdded=0;
-
     for(let i=0;i<totalHours&&slotsAdded<12;i++){
-      const idx=nowH+i;
-      if(idx>=totalHours)break;
-
+      const idx=nowH+i;if(idx>=totalHours)break;
       const slotDate=new Date();
       slotDate.setHours(idx%24,0,0,0);
       if(idx>=24)slotDate.setDate(slotDate.getDate()+Math.floor(idx/24));
-
       const t=Math.round(d.hourly.temperature_2m[idx]);
       const fl=Math.round(d.hourly.apparent_temperature[idx]);
       const wc=d.hourly.weather_code[idx];
       const pr=d.hourly.precipitation_probability[idx];
       const hr=idx%24;
       const lbl=i===0?'Now':(hr<12?hr+'am':hr===12?'12pm':(hr-12)+'pm');
-
-      // Check sunrise/sunset proximity (within 30min)
       let special='';
       if(Math.abs(slotDate-sunrise)<30*60*1000)special='sunrise';
       else if(Math.abs(slotDate-sunset)<30*60*1000)special='sunset';
       else if(sunrise1&&Math.abs(slotDate-sunrise1)<30*60*1000)special='sunrise';
-
       const el=document.createElement('div');
       el.className='hb'+(i===0?' now':'')+(special?' '+special:'');
-
-      if(special==='sunrise'){
-        el.innerHTML='<div class="hb-lbl">Sunrise</div><div class="hb-ico">🌅</div><div class="hb-tmp">'+t+'°</div><div class="hb-fl">FL '+fl+'°</div><div class="hb-pct"></div>';
-      }else if(special==='sunset'){
-        el.innerHTML='<div class="hb-lbl">Sunset</div><div class="hb-ico">🌇</div><div class="hb-tmp">'+t+'°</div><div class="hb-fl">FL '+fl+'°</div><div class="hb-pct"></div>';
-      }else{
-        el.innerHTML='<div class="hb-lbl">'+lbl+'</div><div class="hb-ico">'+(ICO[wc]||'🌡️')+'</div><div class="hb-tmp">'+t+'°</div><div class="hb-fl">FL '+fl+'°</div><div class="hb-pct">'+(pr>10?pr+'%':'')+'</div>';
-      }
-      box.appendChild(el);
-      slotsAdded++;
+      if(special==='sunrise')el.innerHTML='<div class="hb-lbl">Sunrise</div><div class="hb-ico">🌅</div><div class="hb-tmp">'+t+'°</div><div class="hb-fl">FL '+fl+'°</div><div class="hb-pct"></div>';
+      else if(special==='sunset')el.innerHTML='<div class="hb-lbl">Sunset</div><div class="hb-ico">🌇</div><div class="hb-tmp">'+t+'°</div><div class="hb-fl">FL '+fl+'°</div><div class="hb-pct"></div>';
+      else el.innerHTML='<div class="hb-lbl">'+lbl+'</div><div class="hb-ico">'+(ICO[wc]||'🌡️')+'</div><div class="hb-tmp">'+t+'°</div><div class="hb-fl">FL '+fl+'°</div><div class="hb-pct">'+(pr>10?pr+'%':'')+'</div>';
+      box.appendChild(el);slotsAdded++;
     }
   }catch(e){console.warn('wx',e)}
 }
 
-// METRO
 function buildRows(trains,id){
   const col=$(id);
   if(!trains.length){col.innerHTML='<div class="no-trains">No trains scheduled</div>';return}
   col.innerHTML='';
   trains.slice(0,5).forEach(t=>{
     const eta=t.Min,dest=t.DestinationName||t.Destination||'Unknown',line=t.Line||'XX',cars=t.Car?t.Car+'C':'';
-    let ecls='eta-later';
+    let ecls='';
     const etaTxt=(eta==='ARR'||eta==='BRD')?eta:(eta+' min');
     if(eta==='ARR'||eta==='BRD'||eta==='1')ecls='eta-arr';
     else if(eta==='2'||eta==='3')ecls='eta-soon';
-    const row=document.createElement('div');
-    row.className='train-row';
+    const row=document.createElement('div');row.className='train-row';
     row.innerHTML='<div class="t-line l'+line+'">'+line+'</div><div class="t-dest">'+dest+'</div><div class="t-cars">'+cars+'</div><div class="t-eta '+ecls+'">'+etaTxt+'</div>';
     col.appendChild(row);
   });
@@ -533,7 +497,6 @@ async function fetchMetro(){
   }
 }
 
-// QUOTE
 async function fetchQuote(){
   try{
     const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent('https://zenquotes.io/api/today')).then(r=>r.json());
@@ -545,29 +508,18 @@ async function fetchQuote(){
   }
 }
 
-// NEWS — rotates through topics, uses prioritized sources
 async function fetchNews(){
-  const query=NEWS_QUERIES[newsQueryIdx%NEWS_QUERIES.length];
-  newsQueryIdx++;
+  const query=NEWS_QUERIES[newsQueryIdx%NEWS_QUERIES.length];newsQueryIdx++;
   try{
-    // Fetch from prioritized sources + query keyword
     const [srcRes,qRes]=await Promise.all([
       fetch('https://newsapi.org/v2/top-headlines?sources='+NEWS_SOURCES+'&pageSize=8&apiKey='+CFG.newsApiKey).then(r=>r.json()),
       fetch('https://newsapi.org/v2/everything?q='+query+'&language=en&sortBy=publishedAt&pageSize=6&apiKey='+CFG.newsApiKey).then(r=>r.json())
     ]);
-
-    const srcArticles=(srcRes.articles||[]).filter(a=>a.title&&!a.title.includes('[Removed]'));
-    const qArticles=(qRes.articles||[]).filter(a=>a.title&&!a.title.includes('[Removed]'));
-
-    // Merge: prioritized sources first, then topic query
-    const seen=new Set();
-    const merged=[];
-    [...srcArticles,...qArticles].forEach(a=>{
-      if(!seen.has(a.title)){seen.add(a.title);merged.push(a);}
+    const seen=new Set(),merged=[];
+    [...(srcRes.articles||[]),...(qRes.articles||[])].forEach(a=>{
+      if(a.title&&!a.title.includes('[Removed]')&&!seen.has(a.title)){seen.add(a.title);merged.push(a);}
     });
-
-    const items=merged.slice(0,12);
-    const all=[...items,...items]; // double for seamless loop
+    const items=merged.slice(0,12),all=[...items,...items];
     $('newsTicker').innerHTML=all.map(a=>{
       const src=a.source&&a.source.name?'<span class="news-src">'+a.source.name.replace('The Washington Post','WashPost').replace('Associated Press','AP')+'</span>':'';
       return'<span class="news-item">'+src+a.title+'</span>';
@@ -579,7 +531,6 @@ fetchWeather();fetchMetro();fetchQuote();fetchNews();
 setInterval(fetchWeather,10*60*1000);
 setInterval(fetchMetro,CFG.metroRefresh*1000);
 setInterval(fetchQuote,60*60*1000);
-// Rotate news topic every 15 min
 setInterval(fetchNews,15*60*1000);
 </script>
 </body>

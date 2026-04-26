@@ -4,251 +4,260 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Dashboard">
-<title>Home Dashboard</title>
+<title>Dashboard v2</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Figtree:wght@300;400;500;600;700&family=Press+Start+2P&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --paper:#f5f2ee;
-  --ink:#0f0e0c;
-  --ink2:#3a3630;
-  --ink3:#6e6860;
-  --ink4:#a8a099;
-  --ink5:#cec8c0;
-  --card:#ffffff;
-  --card2:#f0ede8;
-  --border:#d8d2c8;
-  --green:#1a5c35;
-  --orange-line:#c05a00;
+  --bg1:#0f0c1a;--bg2:#1a1035;--bg3:#0d1a2e;
+  --glass:rgba(255,255,255,0.08);
+  --glass-border:rgba(255,255,255,0.14);
+  --glass-hover:rgba(255,255,255,0.12);
+  --shine:rgba(255,255,255,0.22);
+  --txt:#f0eeff;--txt2:#b8b0d8;--txt3:#7a7298;--txt4:#4a4468;
+  --accent:#a78bfa;--accent2:#60a5fa;--accent3:#34d399;
+  --warm:#fb923c;--red:#f87171;
   --mono:'Share Tech Mono',monospace;
   --pixel:'Press Start 2P',monospace;
   --body:'Figtree',sans-serif;
   --serif:'DM Serif Display',serif;
-  --r:10px;
-  --gap:10px;
-  --shadow:0 1px 1px rgba(0,0,0,0.06),0 2px 8px rgba(0,0,0,0.07);
+  --r:16px;--gap:10px;
 }
 
-html,body{width:100%;height:100%;overflow:hidden;background:var(--paper);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+html,body{width:100%;height:100%;overflow:hidden;color:var(--txt);font-family:var(--body);-webkit-font-smoothing:antialiased}
 
-body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");opacity:0.6}
+/* Rich layered gradient bg */
+body{
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(120,80,200,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 90%, rgba(30,100,200,0.3) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 60% 40%, rgba(0,180,160,0.15) 0%, transparent 50%),
+    linear-gradient(145deg, var(--bg1) 0%, var(--bg2) 50%, var(--bg3) 100%);
+}
 
-/* Weather background — changes with condition */
-body.wx-rain{background:linear-gradient(160deg,#c8d4dc,#b0bec8)}
-body.wx-clear-day{background:linear-gradient(160deg,#e8f0f8,#d4e4f0)}
-body.wx-clear-night{background:linear-gradient(160deg,#1c2030,#2a3048);--paper:#1c2030;--ink:#e8e4de;--ink2:#c0bab0;--ink3:#8a8478;--ink4:#5a5448;--ink5:#3a342c;--card:#242030;--card2:#1c1c28;--border:#30302c}
-body.wx-cloud{background:linear-gradient(160deg,#e0dcd6,#d0ccc4)}
-body.wx-snow{background:linear-gradient(160deg,#e8eef4,#d4dce8)}
-body.wx-storm{background:linear-gradient(160deg,#2c2c38,#3c3844);--paper:#2c2c38;--ink:#e8e4de;--ink2:#c0bab0;--ink3:#8a8478;--ink4:#5a5448;--ink5:#3a342c;--card:#242030;--card2:#1c1c28;--border:#30302c}
+/* Ambient orbs */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(circle 300px at 15% 50%, rgba(167,139,250,0.12) 0%, transparent 70%),
+    radial-gradient(circle 250px at 85% 25%, rgba(96,165,250,0.1) 0%, transparent 70%),
+    radial-gradient(circle 200px at 50% 85%, rgba(52,211,153,0.08) 0%, transparent 70%);
+}
+
+/* Subtle noise */
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
 
 .dash{position:relative;z-index:1;width:100vw;height:100vh;display:grid;grid-template-rows:auto auto 1fr auto;gap:var(--gap);padding:12px}
 
-/* ── TOP BAR: clocks + weather ── */
-.top-bar{display:grid;grid-template-columns:1fr 1fr 1fr 2px 2fr;gap:var(--gap);align-items:stretch}
-.top-vline{width:2px;background:var(--border);border-radius:1px}
+/* ── LIQUID GLASS CARD ── */
+.glass{
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:var(--r);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  position:relative;overflow:hidden;
+}
+/* Top shine */
+.glass::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--shine),transparent);
+  pointer-events:none;
+}
 
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);position:relative;overflow:hidden}
+/* ── TOP BAR ── */
+.top-bar{display:grid;grid-template-columns:1fr 1fr 1fr 1px 2fr;gap:var(--gap);align-items:stretch}
+.top-vline{width:1px;background:var(--glass-border);border-radius:1px;align-self:stretch;margin:8px 0}
 
-/* Clock cards */
+/* CLOCKS */
 .clock-card{padding:14px 18px;display:flex;flex-direction:column;justify-content:space-between}
-.clock-card.primary::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ink);border-radius:var(--r) 0 0 var(--r)}
-.clock-flag{position:absolute;top:10px;right:12px;font-size:18px;opacity:0.6}
-.clock-label{font-size:7px;font-weight:700;letter-spacing:0.22em;color:var(--ink4);text-transform:uppercase}
-.clock-city{font-size:10px;font-weight:600;color:var(--ink2);margin-top:2px}
-.clock-card.primary .clock-time{font-family:var(--serif);font-size:clamp(44px,5vw,64px);line-height:1;color:var(--ink)}
-.clock-card.secondary .clock-time{font-family:var(--serif);font-size:clamp(28px,3.2vw,42px);line-height:1;color:var(--ink)}
-/* Stationary colons — no blink */
+.clock-card.primary{
+  background:linear-gradient(135deg,rgba(167,139,250,0.15),rgba(96,165,250,0.1));
+  border-color:rgba(167,139,250,0.25);
+}
+.clock-card.primary::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--accent),var(--accent2));border-radius:var(--r) 0 0 var(--r)}
+.clock-flag{position:absolute;top:10px;right:12px;font-size:18px;opacity:0.7}
+.clock-label{font-size:7px;font-weight:700;letter-spacing:0.22em;color:var(--txt3);text-transform:uppercase}
+.clock-card.primary .clock-time{font-family:var(--serif);font-size:clamp(56px,6.2vw,80px);line-height:1;color:var(--txt);text-shadow:0 0 40px rgba(167,139,250,0.4)}
+.clock-card.secondary .clock-time{font-family:var(--serif);font-size:clamp(36px,4vw,54px);line-height:1;color:var(--txt)}
 .clock-colon{opacity:1}
-.clock-ampm{font-family:var(--body);font-weight:400;color:var(--ink3);vertical-align:middle;margin-left:3px}
-.clock-card.primary .clock-ampm{font-size:0.32em;letter-spacing:0.06em}
-.clock-card.secondary .clock-ampm{font-size:0.36em;letter-spacing:0.05em}
-.clock-date{font-size:9px;color:var(--ink3);margin-top:5px}
+.clock-ampm{font-family:var(--body);font-weight:300;color:var(--txt3);vertical-align:middle;margin-left:3px}
+.clock-card.primary .clock-ampm{font-size:0.28em;letter-spacing:0.06em}
+.clock-card.secondary .clock-ampm{font-size:0.32em;letter-spacing:0.05em}
+.clock-date{font-size:9px;color:var(--txt3);margin-top:7px}
 
-/* Weather card — Apple-style */
-.weather-card{
-  padding:0;display:flex;flex-direction:column;overflow:hidden;
-  background:var(--card);
-}
-
-/* Top section: current conditions */
-.wx-current{
-  padding:12px 16px 10px;
-  display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;
-  border-bottom:1px solid var(--border);
-}
+/* WEATHER */
+.weather-card{padding:0;display:flex;flex-direction:column;overflow:hidden}
+.wx-current{padding:12px 16px 10px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;border-bottom:1px solid var(--glass-border)}
 .wx-left{display:flex;flex-direction:column;align-items:center;gap:2px}
-.wx-emoji{font-size:40px;line-height:1}
-.wx-temp{font-family:var(--serif);font-size:42px;color:var(--ink);line-height:1.05}
-.wx-desc{font-size:8px;font-weight:700;letter-spacing:0.14em;color:var(--ink4);text-transform:uppercase;text-align:center;margin-top:2px}
-
+.wx-emoji{font-size:40px;line-height:1;filter:drop-shadow(0 0 12px rgba(255,255,255,0.2))}
+.wx-temp{font-family:var(--serif);font-size:42px;color:var(--txt);line-height:1.05}
+.wx-desc{font-size:8px;font-weight:700;letter-spacing:0.14em;color:var(--txt3);text-transform:uppercase;text-align:center;margin-top:2px}
 .wx-middle{display:flex;flex-direction:column;gap:5px;justify-content:center}
-.wx-hl{font-size:11px;color:var(--ink3);font-weight:500}
-.wx-hl span{font-weight:700;color:var(--ink2)}
-.wx-summary{font-size:10px;color:var(--ink3);line-height:1.45;font-style:italic;max-width:220px}
-
+.wx-hl{font-size:11px;color:var(--txt3);font-weight:500}
+.wx-hl span{font-weight:700;color:var(--txt2)}
+.wx-summary{font-size:10px;color:var(--txt3);line-height:1.45;font-style:italic;max-width:220px}
 .wx-stats{display:grid;grid-template-columns:1fr 1fr;gap:5px 12px;align-self:center}
 .ws{display:flex;flex-direction:column;gap:1px}
-.ws-l{font-size:7px;font-weight:700;letter-spacing:0.16em;color:var(--ink5);text-transform:uppercase}
-.ws-v{font-family:var(--mono);font-size:12px;color:var(--ink2)}
+.ws-l{font-size:7px;font-weight:700;letter-spacing:0.16em;color:var(--txt4);text-transform:uppercase}
+.ws-v{font-family:var(--mono);font-size:12px;color:var(--txt2)}
 
-/* Hourly scroll — Apple weather style */
-.wx-hourly{
-  display:flex;align-items:stretch;overflow-x:auto;
-  scrollbar-width:none;flex-shrink:0;
-  padding:0;background:var(--card2);
-}
+/* Hourly */
+.wx-hourly{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none;flex-shrink:0;background:rgba(0,0,0,0.15)}
 .wx-hourly::-webkit-scrollbar{display:none}
-
-.hb{
-  display:flex;flex-direction:column;align-items:center;gap:3px;
-  min-width:56px;padding:8px 4px;flex-shrink:0;
-  border-right:1px solid var(--border);
-  position:relative;
-}
+.hb{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:56px;padding:8px 4px;flex-shrink:0;border-right:1px solid var(--glass-border)}
 .hb:last-child{border-right:none}
-.hb.now{background:var(--ink)}
-.hb.now .hb-lbl,.hb.now .hb-tmp,.hb.now .hb-fl{color:rgba(255,255,255,0.85)}
-.hb.now .hb-pct{color:rgba(255,255,255,0.5)}
-.hb-lbl{font-size:8px;font-weight:600;color:var(--ink4);white-space:nowrap}
+.hb.now{background:rgba(167,139,250,0.2)}
+.hb.now .hb-lbl,.hb.now .hb-tmp,.hb.now .hb-fl{color:rgba(255,255,255,0.9)}
+.hb-lbl{font-size:8px;font-weight:600;color:var(--txt3);white-space:nowrap}
 .hb-ico{font-size:18px;line-height:1}
-.hb-tmp{font-family:var(--mono);font-size:13px;color:var(--ink);font-weight:500}
-.hb-fl{font-size:8px;color:var(--ink4)}
-.hb-pct{font-size:8px;font-weight:600;color:#1e6bb5}
-.hb.sunrise .hb-ico,.hb.sunset .hb-ico{font-size:15px}
-.hb.sunrise .hb-lbl,.hb.sunset .hb-lbl{color:var(--orange-line);font-weight:700}
+.hb-tmp{font-family:var(--mono);font-size:13px;color:var(--txt);font-weight:500}
+.hb-fl{font-size:8px;color:var(--txt4)}
+.hb-pct{font-size:8px;font-weight:600;color:var(--accent2)}
+.hb.sunrise .hb-lbl,.hb.sunset .hb-lbl{color:var(--warm);font-weight:700}
 
-/* ── METRO (2/3) + COUNTDOWN (1/3) ── */
+/* METRO */
 .mid-row{display:grid;grid-template-columns:2fr 1fr;gap:var(--gap)}
-
 .metro-card{display:flex;flex-direction:column;overflow:hidden}
-.metro-banner{background:var(--ink);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;border-radius:var(--r) var(--r) 0 0;flex-shrink:0}
+.metro-banner{
+  background:linear-gradient(90deg,rgba(167,139,250,0.2),rgba(96,165,250,0.15));
+  padding:8px 16px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--glass-border);flex-shrink:0;
+}
 .metro-banner-left{display:flex;align-items:center;gap:10px}
-.wmata-hex{width:20px;height:20px;background:#1a6bb5;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.wmata-hex{width:20px;height:20px;background:#1a6bb5;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 12px rgba(26,107,181,0.5)}
 .wmata-m{font-family:var(--pixel);font-size:5px;color:#fff}
-.metro-stn{font-family:var(--pixel);font-size:7px;color:#fff;letter-spacing:0.07em}
+.metro-stn{font-family:var(--pixel);font-size:7px;color:var(--txt);letter-spacing:0.07em}
 .metro-lines{display:flex;gap:3px}
-.lpill{width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--pixel);font-size:4px;color:#fff;border:1px solid rgba(255,255,255,0.2)}
-.lOR{background:#c05a00}.lSV{background:#707880}.lBL{background:#0070a8}.lGR{background:#147832}.lRD{background:#a00000}.lYL{background:#c8a000}
-.spip{width:5px;height:5px;border-radius:50%;background:#6ee7a0;animation:pipBreath 2.5s ease-in-out infinite}
+.lpill{width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--pixel);font-size:4px;color:#fff}
+.lOR{background:#c05a00;box-shadow:0 0 6px rgba(192,90,0,0.5)}.lSV{background:#707880}.lBL{background:#0070a8}.lGR{background:#147832}.lRD{background:#a00000}.lYL{background:#c8a000}
+.spip{width:5px;height:5px;border-radius:50%;background:var(--accent3);box-shadow:0 0 6px rgba(52,211,153,0.6);animation:pipBreath 2.5s ease-in-out infinite}
 @keyframes pipBreath{0%,100%{opacity:1}50%{opacity:0.25}}
 .spip-row{display:flex;align-items:center;gap:5px}
-.spip-lbl{font-size:7px;color:rgba(255,255,255,0.4);letter-spacing:0.05em}
+.spip-lbl{font-size:7px;color:var(--txt3);letter-spacing:0.05em}
 
-.metro-body{display:grid;grid-template-columns:1fr 1px 1fr;flex:1;min-height:0;background:var(--card)}
-.m-vline{background:var(--border)}
+.metro-body{display:grid;grid-template-columns:1fr 1px 1fr;flex:1;min-height:0;background:transparent}
+.m-vline{background:var(--glass-border)}
 .metro-col{display:flex;flex-direction:column;overflow:hidden}
-.dir-bar{padding:6px 14px;border-bottom:1px solid var(--border);background:var(--card2);display:flex;align-items:baseline;gap:6px;flex-shrink:0}
-.dir-name{font-size:10px;font-weight:700;color:var(--ink)}
-.dir-sub{font-size:8px;color:var(--ink4)}
-.col-hdr{padding:3px 14px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:20px 1fr auto auto;gap:6px;flex-shrink:0;background:var(--card2)}
-.col-hdr span{font-size:7px;font-weight:700;letter-spacing:0.12em;color:var(--ink5);text-transform:uppercase}
+.dir-bar{padding:6px 14px;border-bottom:1px solid var(--glass-border);display:flex;align-items:baseline;gap:6px;flex-shrink:0;background:rgba(0,0,0,0.1)}
+.dir-name{font-size:10px;font-weight:700;color:var(--txt)}
+.dir-sub{font-size:8px;color:var(--txt3)}
+.col-hdr{padding:3px 14px;border-bottom:1px solid var(--glass-border);display:grid;grid-template-columns:20px 1fr auto auto;gap:6px;flex-shrink:0;background:rgba(0,0,0,0.08)}
+.col-hdr span{font-size:7px;font-weight:700;letter-spacing:0.12em;color:var(--txt4);text-transform:uppercase}
 .train-list{flex:1;overflow-y:auto;scrollbar-width:none}
 .train-list::-webkit-scrollbar{display:none}
-.train-row{display:grid;grid-template-columns:20px 1fr auto auto;align-items:center;gap:7px;padding:8px 14px;border-bottom:1px solid var(--border);transition:background 0.1s}
+.train-row{display:grid;grid-template-columns:20px 1fr auto auto;align-items:center;gap:7px;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background 0.1s}
 .train-row:last-child{border-bottom:none}
-.train-row:hover{background:var(--card2)}
+.train-row:hover{background:rgba(255,255,255,0.04)}
 .t-line{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--pixel);font-size:4px;color:#fff;flex-shrink:0}
-.t-dest{font-size:12px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.t-cars{font-size:9px;color:var(--ink5)}
-.t-eta{font-family:var(--mono);font-size:13px;text-align:right;white-space:nowrap;min-width:46px;color:var(--ink2)}
-.eta-arr{color:var(--green);font-weight:700;animation:etaPulse 0.8s ease-in-out infinite}
+.t-dest{font-size:12px;font-weight:500;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t-cars{font-size:9px;color:var(--txt4)}
+.t-eta{font-family:var(--mono);font-size:13px;text-align:right;white-space:nowrap;min-width:46px;color:var(--txt2)}
+.eta-arr{color:var(--accent3);font-weight:700;text-shadow:0 0 8px rgba(52,211,153,0.5);animation:etaPulse 0.8s ease-in-out infinite}
 @keyframes etaPulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.eta-soon{color:var(--orange-line);font-weight:600}
-.no-trains,.loading-row{display:flex;align-items:center;gap:6px;padding:12px 14px;font-size:11px;color:var(--ink4)}
-.ldot{width:4px;height:4px;border-radius:50%;background:var(--ink5);animation:dotBlink 1.2s ease-in-out infinite}
+.eta-soon{color:var(--warm);font-weight:600}
+.no-trains,.loading-row{display:flex;align-items:center;gap:6px;padding:12px 14px;font-size:11px;color:var(--txt3)}
+.ldot{width:4px;height:4px;border-radius:50%;background:var(--txt4);animation:dotBlink 1.2s ease-in-out infinite}
 .ldot:nth-child(2){animation-delay:.4s}.ldot:nth-child(3){animation-delay:.8s}
 @keyframes dotBlink{0%,100%{opacity:1}50%{opacity:0.1}}
-.metro-foot{padding:4px 14px;background:var(--card2);border-top:1px solid var(--border);border-radius:0 0 var(--r) var(--r);display:flex;justify-content:space-between;flex-shrink:0}
-.metro-foot span{font-size:7px;color:var(--ink5);letter-spacing:0.04em}
+.metro-foot{padding:4px 14px;border-top:1px solid var(--glass-border);display:flex;justify-content:space-between;flex-shrink:0;background:rgba(0,0,0,0.1)}
+.metro-foot span{font-size:7px;color:var(--txt4);letter-spacing:0.04em}
 
-/* Countdown */
-.countdown-card{padding:16px 18px;display:flex;flex-direction:column;justify-content:center;gap:10px}
-.cd-label{font-size:7px;font-weight:700;letter-spacing:0.22em;color:var(--ink5);text-transform:uppercase}
-.cd-event{font-size:12px;font-weight:600;color:var(--ink2);line-height:1.4}
-.cd-nums{display:flex;gap:6px;align-items:flex-end}
-.cd-unit{display:flex;flex-direction:column;align-items:center;gap:1px}
-.cd-n{font-family:var(--mono);font-size:30px;color:var(--ink);line-height:1;letter-spacing:-0.02em}
-.cd-u{font-size:6px;font-weight:700;letter-spacing:0.14em;color:var(--ink5);text-transform:uppercase}
-.cd-sep{font-family:var(--mono);font-size:22px;color:var(--ink5);margin-bottom:6px}
-.cd-divider{height:1px;background:var(--border)}
-.cd-sub{font-size:9px;color:var(--ink4);font-style:italic}
+/* COUNTDOWN — glass pill, creative */
+.countdown-card{
+  padding:14px 18px;display:flex;flex-direction:column;justify-content:center;gap:8px;
+  background:linear-gradient(135deg,rgba(167,139,250,0.1),rgba(96,165,250,0.08));
+  border-color:rgba(167,139,250,0.2);
+}
+.cd-label{font-size:7px;font-weight:700;letter-spacing:0.22em;color:var(--txt4);text-transform:uppercase}
+.cd-event{font-size:11px;font-weight:600;color:var(--txt2)}
+.cd-nums{display:flex;align-items:flex-end;gap:0;width:100%}
+.cd-block{display:flex;flex-direction:column;align-items:center;flex:1;min-width:0}
+.cd-n{
+  font-family:var(--mono);font-size:clamp(20px,2.6vw,32px);
+  color:var(--txt);line-height:1;font-weight:700;letter-spacing:-0.02em;
+  text-shadow:0 0 20px rgba(167,139,250,0.6);
+}
+.cd-u{font-size:6px;font-weight:700;letter-spacing:0.14em;color:var(--txt4);text-transform:uppercase;margin-top:2px}
+.cd-colon{font-family:var(--mono);font-size:18px;color:var(--txt4);padding:0 1px;margin-bottom:8px;align-self:flex-end;flex-shrink:0}
+.cd-divider{height:1px;background:var(--glass-border)}
+.cd-footer{font-size:9px;color:var(--txt4);font-style:italic}
 
-/* ── BOTTOM: news above quote ── */
+/* BOTTOM */
 .bottom-bar{display:grid;grid-template-rows:auto auto;gap:var(--gap)}
 
-.news-bar{
-  display:flex;align-items:center;overflow:hidden;
-  background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);
+.news-bar{display:flex;align-items:center;overflow:hidden}
+.news-tag{
+  background:linear-gradient(135deg,rgba(167,139,250,0.3),rgba(96,165,250,0.2));
+  color:var(--txt);font-size:7px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+  padding:7px 14px;white-space:nowrap;flex-shrink:0;
+  display:flex;align-items:center;gap:5px;
+  border-right:1px solid var(--glass-border);align-self:stretch;border-radius:var(--r) 0 0 var(--r);
 }
-.news-tag{background:var(--ink);color:var(--paper);font-size:7px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;padding:7px 12px;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:5px;border-radius:var(--r) 0 0 var(--r);align-self:stretch}
-.news-blink{width:4px;height:4px;border-radius:50%;background:#fff;opacity:0.5;animation:dotBlink 2s ease-in-out infinite}
+.news-blink{width:4px;height:4px;border-radius:50%;background:var(--red);box-shadow:0 0 4px var(--red);animation:dotBlink 2s ease-in-out infinite}
 .news-mask{flex:1;overflow:hidden;position:relative}
-.news-mask::before,.news-mask::after{content:'';position:absolute;top:0;bottom:0;width:20px;z-index:2;pointer-events:none}
-.news-mask::before{left:0;background:linear-gradient(to right,var(--card),transparent)}
-.news-mask::after{right:0;background:linear-gradient(to left,var(--card),transparent)}
+.news-mask::before,.news-mask::after{content:'';position:absolute;top:0;bottom:0;width:24px;z-index:2;pointer-events:none}
+.news-mask::before{left:0;background:linear-gradient(to right,rgba(15,12,26,0.95),transparent)}
+.news-mask::after{right:0;background:linear-gradient(to left,rgba(15,12,26,0.95),transparent)}
 .news-ticker{display:flex;white-space:nowrap;align-items:center;padding:0 16px;animation:tickerScroll 90s linear infinite}
 .news-ticker:hover{animation-play-state:paused}
 @keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.news-item{font-size:11px;color:var(--ink3);padding:7px 20px;border-left:1px solid var(--border);cursor:default;transition:color 0.15s;white-space:nowrap}
+.news-item{font-size:11px;color:var(--txt2);padding:7px 22px;border-left:1px solid var(--glass-border);cursor:default;transition:color 0.15s;white-space:nowrap}
 .news-item:first-child{border-left:none}
-.news-item:hover{color:var(--ink)}
-.news-src{font-size:9px;font-weight:700;color:var(--ink5);margin-right:6px}
-.news-ph{font-size:10px;color:var(--ink5);padding:7px 16px}
+.news-item:hover{color:var(--txt)}
+.news-src{font-size:9px;font-weight:700;color:var(--accent);margin-right:6px}
+.news-ph{font-size:10px;color:var(--txt4);padding:7px 16px}
 
+/* QUOTE — frosted pill */
 .quote-card{
-  padding:7px 20px;display:flex;align-items:center;gap:12px;
-  background:var(--card);border:1px solid var(--border);border-radius:50px;box-shadow:var(--shadow);
+  padding:8px 20px;display:flex;align-items:center;gap:10px;
+  border-radius:50px;
+  background:rgba(255,255,255,0.06);
+  border-color:rgba(255,255,255,0.12);
 }
-.q-mark{font-family:var(--serif);font-size:26px;color:var(--ink5);line-height:1;flex-shrink:0;margin-top:-2px}
+.q-mark{font-family:var(--serif);font-size:20px;color:var(--accent);line-height:1;flex-shrink:0;margin-top:-1px;opacity:0.6}
 .q-body{display:flex;align-items:baseline;gap:8px;min-width:0;flex:1;flex-wrap:wrap}
-.q-text{font-size:11px;color:var(--ink3);line-height:1.45;font-style:italic;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.q-author{font-size:9px;font-weight:600;color:var(--ink5);letter-spacing:0.04em;white-space:nowrap;flex-shrink:0}
+.q-text{font-size:11px;color:var(--txt2);line-height:1.45;font-style:italic;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.q-author{font-size:9px;font-weight:600;color:var(--txt4);letter-spacing:0.04em;white-space:nowrap;flex-shrink:0}
 
-@keyframes fadeUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-.top-bar{animation:fadeUp 0.4s ease both}
-.mid-row{animation:fadeUp 0.4s 0.06s ease both}
-.bottom-bar{animation:fadeUp 0.4s 0.12s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.top-bar{animation:fadeUp 0.5s ease both}
+.mid-row{animation:fadeUp 0.5s 0.07s ease both}
+.bottom-bar{animation:fadeUp 0.5s 0.14s ease both}
 </style>
 </head>
 <body>
 <div class="dash">
-
-  <!-- ROW 1: CLOCKS + WEATHER -->
   <div class="top-bar">
-    <div class="card clock-card primary">
+    <div class="glass clock-card primary">
       <div class="clock-flag">🇺🇸</div>
-      <div><div class="clock-label">Local Time</div><div class="clock-city">Arlington, VA</div></div>
+      <div class="clock-label">Local Time</div>
       <div>
         <div class="clock-time"><span id="loc-h">12</span><span class="clock-colon">:</span><span id="loc-m">00</span><span class="clock-ampm" id="loc-ap">AM</span></div>
         <div class="clock-date" id="loc-date">Saturday · April 25</div>
       </div>
     </div>
-
-    <div class="card clock-card secondary">
+    <div class="glass clock-card secondary">
       <div class="clock-flag">🇮🇳</div>
-      <div><div class="clock-label">India</div><div class="clock-city">Mumbai / Delhi</div></div>
+      <div class="clock-label">India</div>
       <div>
         <div class="clock-time"><span id="ind-h">--</span><span class="clock-colon">:</span><span id="ind-m">--</span><span class="clock-ampm" id="ind-ap">AM</span></div>
         <div class="clock-date" id="ind-date">--</div>
       </div>
     </div>
-
-    <div class="card clock-card secondary">
+    <div class="glass clock-card secondary">
       <div class="clock-flag">🇮🇩</div>
-      <div><div class="clock-label">Indonesia</div><div class="clock-city">Jakarta</div></div>
+      <div class="clock-label">Indonesia</div>
       <div>
         <div class="clock-time"><span id="jak-h">--</span><span class="clock-colon">:</span><span id="jak-m">--</span><span class="clock-ampm" id="jak-ap">AM</span></div>
         <div class="clock-date" id="jak-date">--</div>
       </div>
     </div>
-
     <div class="top-vline"></div>
-
-    <!-- Weather — Apple style -->
-    <div class="card weather-card">
+    <div class="glass weather-card">
       <div class="wx-current">
         <div class="wx-left">
           <div class="wx-emoji" id="wx-emoji">⛅</div>
@@ -270,17 +279,13 @@ body.wx-storm{background:linear-gradient(160deg,#2c2c38,#3c3844);--paper:#2c2c38
     </div>
   </div>
 
-  <!-- ROW 2: METRO (2/3) + COUNTDOWN (1/3) -->
   <div class="mid-row">
-    <div class="card metro-card">
+    <div class="glass metro-card">
       <div class="metro-banner">
         <div class="metro-banner-left">
           <div class="wmata-hex"><span class="wmata-m">M</span></div>
           <div class="metro-stn">BALLSTON-MU</div>
-          <div class="metro-lines">
-            <div class="lpill lOR">OR</div>
-            <div class="lpill lSV">SV</div>
-          </div>
+          <div class="metro-lines"><div class="lpill lOR">OR</div><div class="lpill lSV">SV</div></div>
         </div>
         <div class="spip-row"><div class="spip" id="sPip"></div><div class="spip-lbl">Live</div></div>
       </div>
@@ -297,38 +302,29 @@ body.wx-storm{background:linear-gradient(160deg,#2c2c38,#3c3844);--paper:#2c2c38
           <div class="train-list" id="col-va"><div class="loading-row"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div><span>Loading</span></div></div>
         </div>
       </div>
-      <div class="metro-foot">
-        <span>WMATA · Ballston-MU (K04) · Arlington, VA</span>
-        <span>Updated <span id="mts">--:--</span></span>
-      </div>
+      <div class="metro-foot"><span>WMATA · Ballston-MU (K04) · Arlington, VA</span><span>Updated <span id="mts">--:--</span></span></div>
     </div>
-
-    <div class="card countdown-card">
+    <div class="glass countdown-card">
       <div class="cd-label">Countdown</div>
       <div class="cd-event">🛬 Parents arrive in DC</div>
       <div class="cd-nums">
-        <div class="cd-unit"><span class="cd-n" id="cd-d">--</span><span class="cd-u">days</span></div>
-        <div class="cd-sep">:</div>
-        <div class="cd-unit"><span class="cd-n" id="cd-h">--</span><span class="cd-u">hrs</span></div>
-        <div class="cd-sep">:</div>
-        <div class="cd-unit"><span class="cd-n" id="cd-m">--</span><span class="cd-u">min</span></div>
+        <div class="cd-block"><span class="cd-n" id="cd-d">--</span><span class="cd-u">days</span></div>
+        <div class="cd-colon">:</div>
+        <div class="cd-block"><span class="cd-n" id="cd-h">--</span><span class="cd-u">hrs</span></div>
+        <div class="cd-colon">:</div>
+        <div class="cd-block"><span class="cd-n" id="cd-m">--</span><span class="cd-u">min</span></div>
       </div>
       <div class="cd-divider"></div>
-      <div class="cd-sub">May 9 · Washington DC</div>
+      <div class="cd-footer">May 9 · Washington DC</div>
     </div>
   </div>
 
-  <!-- ROW 3: NEWS above QUOTE -->
   <div class="bottom-bar">
-    <div class="news-bar">
+    <div class="glass news-bar">
       <div class="news-tag"><div class="news-blink"></div>News</div>
-      <div class="news-mask">
-        <div class="news-ticker" id="newsTicker">
-          <span class="news-ph">Loading headlines…</span>
-        </div>
-      </div>
+      <div class="news-mask"><div class="news-ticker" id="newsTicker"><span class="news-ph">Loading headlines…</span></div></div>
     </div>
-    <div class="quote-card">
+    <div class="glass quote-card">
       <div class="q-mark">"</div>
       <div class="q-body">
         <div class="q-text" id="q-text">Loading today's quote…</div>
@@ -336,202 +332,91 @@ body.wx-storm{background:linear-gradient(160deg,#2c2c38,#3c3844);--paper:#2c2c38
       </div>
     </div>
   </div>
-
 </div>
 <script>
-const CFG={
-  wmataKey:'de51925a8b784c738868a798a5bc4f18',
-  stationCode:'K04',
-  lat:38.8820,lon:-77.1114,
-  metroRefresh:60,
-  newsApiKey:'2a29a01069514782bc07939ef3cb3a21',
-  countdownTarget:new Date('2026-05-09T00:00:00'),
-};
-
-const NEWS_SOURCES='bbc-news,reuters,associated-press,the-washington-post';
-const NEWS_QUERIES=['business','technology','politics','world'];
-let newsQueryIdx=0;
-
+const CFG={wmataKey:'de51925a8b784c738868a798a5bc4f18',stationCode:'K04',lat:38.8820,lon:-77.1114,metroRefresh:60,newsApiKey:'2a29a01069514782bc07939ef3cb3a21',countdownTarget:new Date('2026-05-09T00:00:00')};
+const NS='bbc-news,reuters,associated-press,the-washington-post',NQ=['business','technology','politics','world'];let nqi=0;
 const WMO={0:'Clear Sky',1:'Mainly Clear',2:'Partly Cloudy',3:'Overcast',45:'Fog',48:'Icy Fog',51:'Light Drizzle',53:'Drizzle',55:'Heavy Drizzle',61:'Light Rain',63:'Rain',65:'Heavy Rain',71:'Light Snow',73:'Snow',75:'Heavy Snow',80:'Rain Showers',81:'Showers',82:'Heavy Showers',95:'Thunderstorm',96:'Thunderstorm',99:'Thunderstorm'};
 const ICO={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌦️',63:'🌧️',65:'🌧️',71:'🌨️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
-
-function wxClass(code,isDay){
-  if(code===0||code===1)return isDay?'wx-clear-day':'wx-clear-night';
-  if(code===2||code===3)return 'wx-cloud';
-  if(code>=45&&code<=48)return 'wx-cloud';
-  if(code>=51&&code<=67||code>=80&&code<=82)return 'wx-rain';
-  if(code>=71&&code<=77)return 'wx-snow';
-  if(code>=95)return 'wx-storm';
-  return '';
-}
-
-function wxSummary(code,feelsLike,windSpeed){
-  const w=Math.round(windSpeed),f=Math.round(feelsLike);
-  if(code>=95)return'Thunderstorms active. Feels like '+f+'°. Stay indoors if possible.';
-  if(code>=80)return'Rain showers likely. Feels like '+f+'°. Wind at '+w+' km/h.';
-  if(code>=61)return'Rainy conditions. Grab an umbrella. Feels like '+f+'°.';
-  if(code>=51)return'Light drizzle. Feels like '+f+'°. Wind '+w+' km/h.';
-  if(code>=71&&code<=77)return'Snowy conditions. Feels like '+f+'°. Watch for ice.';
-  if(code===3)return'Overcast skies. Feels like '+f+'°. Wind '+w+' km/h.';
-  if(code===2)return'Partly cloudy. Feels like '+f+'°. A pleasant day overall.';
-  if(code<=1)return'Clear skies. Feels like '+f+'°. UV could be high — check before heading out.';
-  return'Feels like '+f+'°. Wind at '+w+' km/h.';
-}
-
+function wxS(c,f,w){const fl=Math.round(f),ws=Math.round(w);if(c>=95)return'Thunderstorms active. Feels like '+fl+'°.';if(c>=80)return'Rain showers. Feels like '+fl+'°. Wind '+ws+' km/h.';if(c>=61)return'Rainy — grab an umbrella. Feels like '+fl+'°.';if(c>=51)return'Light drizzle. Feels like '+fl+'°.';if(c>=71&&c<=77)return'Snow. Feels like '+fl+'°.';if(c===3)return'Overcast. Feels like '+fl+'°. Wind '+ws+' km/h.';if(c<=1)return'Clear skies. Feels like '+fl+'°. UV could be high.';return'Feels like '+fl+'°. Wind '+ws+' km/h.';}
 const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const MONS=['January','February','March','April','May','June','July','August','September','October','November','December'];
-const pad=n=>String(n).padStart(2,'0');
-const $=id=>document.getElementById(id);
-
-function fmtClock(now,tz){
-  const d=new Date(now.toLocaleString('en-US',{timeZone:tz}));
-  const h=d.getHours(),m=d.getMinutes();
-  return{h:h%12||12,m:pad(m),ap:h>=12?'PM':'AM',date:DAYS[d.getDay()]+' · '+MONS[d.getMonth()]+' '+d.getDate()};
-}
-
+const pad=n=>String(n).padStart(2,'0');const $=id=>document.getElementById(id);
+function fmtC(now,tz){const d=new Date(now.toLocaleString('en-US',{timeZone:tz}));const h=d.getHours(),m=d.getMinutes();return{h:h%12||12,m:pad(m),ap:h>=12?'PM':'AM',date:DAYS[d.getDay()]+' · '+MONS[d.getMonth()]+' '+d.getDate()}}
 function tick(){
-  const now=new Date();
-  const lh=now.getHours(),lm=now.getMinutes();
-  $('loc-h').textContent=lh%12||12;$('loc-m').textContent=pad(lm);
-  $('loc-ap').textContent=lh>=12?'PM':'AM';
-  $('loc-date').textContent=DAYS[now.getDay()]+' · '+MONS[now.getMonth()]+' '+now.getDate();
-
-  const ind=fmtClock(now,'Asia/Kolkata');
-  $('ind-h').textContent=ind.h;$('ind-m').textContent=ind.m;$('ind-ap').textContent=ind.ap;$('ind-date').textContent=ind.date;
-
-  const jak=fmtClock(now,'Asia/Jakarta');
-  $('jak-h').textContent=jak.h;$('jak-m').textContent=jak.m;$('jak-ap').textContent=jak.ap;$('jak-date').textContent=jak.date;
-
-  const diff=CFG.countdownTarget-now;
-  if(diff>0){
-    $('cd-d').textContent=Math.floor(diff/86400000);
-    $('cd-h').textContent=pad(Math.floor((diff%86400000)/3600000));
-    $('cd-m').textContent=pad(Math.floor((diff%3600000)/60000));
-  }else{
-    $('cd-d').textContent='🎉';$('cd-h').textContent='00';$('cd-m').textContent='00';
-  }
+  const n=new Date(),lh=n.getHours(),lm=n.getMinutes();
+  $('loc-h').textContent=lh%12||12;$('loc-m').textContent=pad(lm);$('loc-ap').textContent=lh>=12?'PM':'AM';
+  $('loc-date').textContent=DAYS[n.getDay()]+' · '+MONS[n.getMonth()]+' '+n.getDate();
+  const ind=fmtC(n,'Asia/Kolkata');$('ind-h').textContent=ind.h;$('ind-m').textContent=ind.m;$('ind-ap').textContent=ind.ap;$('ind-date').textContent=ind.date;
+  const jak=fmtC(n,'Asia/Jakarta');$('jak-h').textContent=jak.h;$('jak-m').textContent=jak.m;$('jak-ap').textContent=jak.ap;$('jak-date').textContent=jak.date;
+  const diff=CFG.countdownTarget-n;
+  if(diff>0){$('cd-d').textContent=Math.floor(diff/86400000);$('cd-h').textContent=pad(Math.floor((diff%86400000)/3600000));$('cd-m').textContent=pad(Math.floor((diff%3600000)/60000));}
+  else{$('cd-d').textContent='🎉';$('cd-h').textContent='00';$('cd-m').textContent='00';}
 }
 setInterval(tick,1000);tick();
-
 async function fetchWeather(){
   try{
-    const d=await fetch(
-      'https://api.open-meteo.com/v1/forecast?latitude='+CFG.lat+'&longitude='+CFG.lon
-      +'&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,relative_humidity_2m,uv_index'
-      +'&hourly=temperature_2m,apparent_temperature,weather_code,precipitation_probability,is_day'
-      +'&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset'
-      +'&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&forecast_days=2'
-    ).then(r=>r.json());
-    const c=d.current,code=c.weather_code;
-    const nowH=new Date().getHours();
-    const isDay=d.hourly.is_day[nowH]===1;
-    document.body.className=wxClass(code,isDay);
-    $('wx-emoji').textContent=ICO[code]||'🌡️';
-    $('wx-temp').textContent=Math.round(c.temperature_2m)+'°';
-    $('wx-desc').textContent=WMO[code]||'Unknown';
-    $('wx-hi').textContent=Math.round(d.daily.temperature_2m_max[0])+'°';
-    $('wx-lo').textContent=Math.round(d.daily.temperature_2m_min[0])+'°';
-    $('wx-summary').textContent=wxSummary(code,c.apparent_temperature,c.wind_speed_10m);
-    $('feels').textContent=Math.round(c.apparent_temperature)+'°C';
-    $('humid').textContent=c.relative_humidity_2m+'%';
-    $('wind').textContent=Math.round(c.wind_speed_10m)+' km/h';
-    $('uv').textContent=Math.round(c.uv_index);
-
+    const d=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+CFG.lat+'&longitude='+CFG.lon+'&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,relative_humidity_2m,uv_index&hourly=temperature_2m,apparent_temperature,weather_code,precipitation_probability,is_day&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&forecast_days=2').then(r=>r.json());
+    const c=d.current,code=c.weather_code,nowH=new Date().getHours();
+    $('wx-emoji').textContent=ICO[code]||'🌡️';$('wx-temp').textContent=Math.round(c.temperature_2m)+'°';$('wx-desc').textContent=WMO[code]||'Unknown';
+    $('wx-hi').textContent=Math.round(d.daily.temperature_2m_max[0])+'°';$('wx-lo').textContent=Math.round(d.daily.temperature_2m_min[0])+'°';
+    $('wx-summary').textContent=wxS(code,c.apparent_temperature,c.wind_speed_10m);
+    $('feels').textContent=Math.round(c.apparent_temperature)+'°C';$('humid').textContent=c.relative_humidity_2m+'%';$('wind').textContent=Math.round(c.wind_speed_10m)+' km/h';$('uv').textContent=Math.round(c.uv_index);
     const box=$('hourly');box.innerHTML='';
-    const sunrise=new Date(d.daily.sunrise[0]);
-    const sunset=new Date(d.daily.sunset[0]);
-    const sunrise1=d.daily.sunrise[1]?new Date(d.daily.sunrise[1]):null;
-    const totalHours=d.hourly.temperature_2m.length;
-    let slotsAdded=0;
-    for(let i=0;i<totalHours&&slotsAdded<12;i++){
-      const idx=nowH+i;if(idx>=totalHours)break;
-      const slotDate=new Date();
-      slotDate.setHours(idx%24,0,0,0);
-      if(idx>=24)slotDate.setDate(slotDate.getDate()+Math.floor(idx/24));
-      const t=Math.round(d.hourly.temperature_2m[idx]);
-      const fl=Math.round(d.hourly.apparent_temperature[idx]);
-      const wc=d.hourly.weather_code[idx];
-      const pr=d.hourly.precipitation_probability[idx];
-      const hr=idx%24;
+    const sr=new Date(d.daily.sunrise[0]),ss=new Date(d.daily.sunset[0]),sr1=d.daily.sunrise[1]?new Date(d.daily.sunrise[1]):null;
+    let added=0;
+    for(let i=0;i<d.hourly.temperature_2m.length&&added<12;i++){
+      const idx=nowH+i;if(idx>=d.hourly.temperature_2m.length)break;
+      const sd=new Date();sd.setHours(idx%24,0,0,0);if(idx>=24)sd.setDate(sd.getDate()+1);
+      const t=Math.round(d.hourly.temperature_2m[idx]),fl=Math.round(d.hourly.apparent_temperature[idx]),wc=d.hourly.weather_code[idx],pr=d.hourly.precipitation_probability[idx],hr=idx%24;
       const lbl=i===0?'Now':(hr<12?hr+'am':hr===12?'12pm':(hr-12)+'pm');
-      let special='';
-      if(Math.abs(slotDate-sunrise)<30*60*1000)special='sunrise';
-      else if(Math.abs(slotDate-sunset)<30*60*1000)special='sunset';
-      else if(sunrise1&&Math.abs(slotDate-sunrise1)<30*60*1000)special='sunrise';
-      const el=document.createElement('div');
-      el.className='hb'+(i===0?' now':'')+(special?' '+special:'');
-      if(special==='sunrise')el.innerHTML='<div class="hb-lbl">Sunrise</div><div class="hb-ico">🌅</div><div class="hb-tmp">'+t+'°</div><div class="hb-fl">FL '+fl+'°</div><div class="hb-pct"></div>';
-      else if(special==='sunset')el.innerHTML='<div class="hb-lbl">Sunset</div><div class="hb-ico">🌇</div><div class="hb-tmp">'+t+'°</div><div class="hb-fl">FL '+fl+'°</div><div class="hb-pct"></div>';
+      let sp='';if(Math.abs(sd-sr)<30*60*1000)sp='sunrise';else if(Math.abs(sd-ss)<30*60*1000)sp='sunset';else if(sr1&&Math.abs(sd-sr1)<30*60*1000)sp='sunrise';
+      const el=document.createElement('div');el.className='hb'+(i===0?' now':'')+(sp?' '+sp:'');
+      if(sp==='sunrise')el.innerHTML='<div class="hb-lbl">Sunrise</div><div class="hb-ico">🌅</div><div class="hb-tmp">'+t+'°</div><div class="hb-fl">FL '+fl+'°</div><div class="hb-pct"></div>';
+      else if(sp==='sunset')el.innerHTML='<div class="hb-lbl">Sunset</div><div class="hb-ico">🌇</div><div class="hb-tmp">'+t+'°</div><div class="hb-fl">FL '+fl+'°</div><div class="hb-pct"></div>';
       else el.innerHTML='<div class="hb-lbl">'+lbl+'</div><div class="hb-ico">'+(ICO[wc]||'🌡️')+'</div><div class="hb-tmp">'+t+'°</div><div class="hb-fl">FL '+fl+'°</div><div class="hb-pct">'+(pr>10?pr+'%':'')+'</div>';
-      box.appendChild(el);slotsAdded++;
+      box.appendChild(el);added++;
     }
   }catch(e){console.warn('wx',e)}
 }
-
 function buildRows(trains,id){
-  const col=$(id);
-  if(!trains.length){col.innerHTML='<div class="no-trains">No trains scheduled</div>';return}
-  col.innerHTML='';
+  const col=$(id);if(!trains.length){col.innerHTML='<div class="no-trains">No trains scheduled</div>';return}col.innerHTML='';
   trains.slice(0,5).forEach(t=>{
     const eta=t.Min,dest=t.DestinationName||t.Destination||'Unknown',line=t.Line||'XX',cars=t.Car?t.Car+'C':'';
-    let ecls='';
-    const etaTxt=(eta==='ARR'||eta==='BRD')?eta:(eta+' min');
-    if(eta==='ARR'||eta==='BRD'||eta==='1')ecls='eta-arr';
-    else if(eta==='2'||eta==='3')ecls='eta-soon';
+    let ecls='';const etaTxt=(eta==='ARR'||eta==='BRD')?eta:(eta+' min');
+    if(eta==='ARR'||eta==='BRD'||eta==='1')ecls='eta-arr';else if(eta==='2'||eta==='3')ecls='eta-soon';
     const row=document.createElement('div');row.className='train-row';
     row.innerHTML='<div class="t-line l'+line+'">'+line+'</div><div class="t-dest">'+dest+'</div><div class="t-cars">'+cars+'</div><div class="t-eta '+ecls+'">'+etaTxt+'</div>';
     col.appendChild(row);
   });
 }
-
 async function fetchMetro(){
   try{
     const data=await fetch('https://api.wmata.com/StationPrediction.svc/json/GetPrediction/'+CFG.stationCode,{headers:{'api_key':CFG.wmataKey}}).then(r=>r.json());
-    buildRows((data.Trains||[]).filter(t=>t.Group==='1'),'col-dc');
-    buildRows((data.Trains||[]).filter(t=>t.Group==='2'),'col-va');
-    const n=new Date();$('mts').textContent=pad(n.getHours())+':'+pad(n.getMinutes());
-    $('sPip').style.background='#6ee7a0';
-  }catch(e){
-    ['col-dc','col-va'].forEach(id=>{$(id).innerHTML='<div class="no-trains">Connection lost</div>'});
-    $('sPip').style.background='#f87171';
-  }
+    buildRows((data.Trains||[]).filter(t=>t.Group==='1'),'col-dc');buildRows((data.Trains||[]).filter(t=>t.Group==='2'),'col-va');
+    $('mts').textContent=pad(new Date().getHours())+':'+pad(new Date().getMinutes());$('sPip').style.background='#34d399';
+  }catch(e){['col-dc','col-va'].forEach(id=>{$(id).innerHTML='<div class="no-trains">Connection lost</div>'});$('sPip').style.background='#f87171';}
 }
-
 async function fetchQuote(){
-  try{
-    const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent('https://zenquotes.io/api/today')).then(r=>r.json());
-    const data=JSON.parse(r.contents);
-    if(data&&data[0]){$('q-text').textContent='\u201c'+data[0].q+'\u201d';$('q-author').textContent='\u2014 '+data[0].a;}
-  }catch(e){
-    $('q-text').textContent='\u201cThe secret of getting ahead is getting started.\u201d';
-    $('q-author').textContent='\u2014 Mark Twain';
-  }
+  try{const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent('https://zenquotes.io/api/today')).then(r=>r.json());const data=JSON.parse(r.contents);if(data&&data[0]){$('q-text').textContent='\u201c'+data[0].q+'\u201d';$('q-author').textContent='\u2014 '+data[0].a;}}
+  catch(e){$('q-text').textContent='\u201cThe secret of getting ahead is getting started.\u201d';$('q-author').textContent='\u2014 Mark Twain';}
 }
-
+const PROXY='https://api.allorigins.win/get?url=';
 async function fetchNews(){
-  const query=NEWS_QUERIES[newsQueryIdx%NEWS_QUERIES.length];newsQueryIdx++;
+  const query=NQ[nqi%NQ.length];nqi++;
   try{
-    const [srcRes,qRes]=await Promise.all([
-      fetch('https://newsapi.org/v2/top-headlines?sources='+NEWS_SOURCES+'&pageSize=8&apiKey='+CFG.newsApiKey).then(r=>r.json()),
-      fetch('https://newsapi.org/v2/everything?q='+query+'&language=en&sortBy=publishedAt&pageSize=6&apiKey='+CFG.newsApiKey).then(r=>r.json())
-    ]);
-    const seen=new Set(),merged=[];
-    [...(srcRes.articles||[]),...(qRes.articles||[])].forEach(a=>{
-      if(a.title&&!a.title.includes('[Removed]')&&!seen.has(a.title)){seen.add(a.title);merged.push(a);}
-    });
-    const items=merged.slice(0,12),all=[...items,...items];
-    $('newsTicker').innerHTML=all.map(a=>{
-      const src=a.source&&a.source.name?'<span class="news-src">'+a.source.name.replace('The Washington Post','WashPost').replace('Associated Press','AP')+'</span>':'';
-      return'<span class="news-item">'+src+a.title+'</span>';
-    }).join('');
+    const urls=[
+      'https://newsapi.org/v2/top-headlines?sources='+NS+'&pageSize=8&apiKey='+CFG.newsApiKey,
+      'https://newsapi.org/v2/everything?q='+query+'&language=en&sortBy=publishedAt&pageSize=6&apiKey='+CFG.newsApiKey
+    ];
+    const [s,q]=await Promise.all(urls.map(u=>fetch(PROXY+encodeURIComponent(u)).then(r=>r.json()).then(r=>JSON.parse(r.contents))));
+    const seen=new Set(),merged=[];[...(s.articles||[]),...(q.articles||[])].forEach(a=>{if(a.title&&!a.title.includes('[Removed]')&&!seen.has(a.title)){seen.add(a.title);merged.push(a);}});
+    const all=[...merged.slice(0,12),...merged.slice(0,12)];
+    if(all.length)$('newsTicker').innerHTML=all.map(a=>'<span class="news-item">'+(a.source?.name?'<span class="news-src">'+a.source.name.replace('The Washington Post','WashPost').replace('Associated Press','AP')+'</span>':'')+a.title+'</span>').join('');
   }catch(e){console.warn('news',e)}
 }
-
 fetchWeather();fetchMetro();fetchQuote();fetchNews();
-setInterval(fetchWeather,10*60*1000);
-setInterval(fetchMetro,CFG.metroRefresh*1000);
-setInterval(fetchQuote,60*60*1000);
-setInterval(fetchNews,15*60*1000);
+setInterval(fetchWeather,10*60*1000);setInterval(fetchMetro,CFG.metroRefresh*1000);setInterval(fetchQuote,60*60*1000);setInterval(fetchNews,15*60*1000);
 </script>
 </body>
 </html>

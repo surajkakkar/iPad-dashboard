@@ -43,11 +43,10 @@ body.night{
   --trans:background 0.5s ease,color 0.5s ease,border-color 0.5s ease;
 }
 
-html,body{width:100%;height:100%;color:var(--txt);font-family:var(--body);-webkit-font-smoothing:antialiased;transition:var(--trans)}
+html,body{width:100%;height:100vh;height:100dvh;color:var(--txt);font-family:var(--body);-webkit-font-smoothing:antialiased;transition:var(--trans)}
 
 body{
-  height:100dvh;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;
-  -webkit-overflow-scrolling:touch;
+  overflow:hidden;
   background:var(--bg);
   transition:var(--trans);
 }
@@ -59,16 +58,18 @@ body{
 }
 
 .dash{
-  position:relative;z-index:1;width:100%;min-height:100dvh;
+  position:relative;z-index:1;width:100%;height:100vh;height:100dvh;
   display:grid;
-  grid-template-rows:minmax(0,auto) minmax(0,auto) minmax(240px,1fr);
+  grid-template-rows:24vh 22vh 1fr;
+  grid-template-rows:24dvh 22dvh 1fr;
   gap:var(--gap);padding:clamp(6px,1.2vw,14px);
+  overflow:hidden;
 }
 
 /* ── ROW 1 ── */
 .top-bar{
   display:grid;
-  grid-template-columns:1fr 1.6fr;
+  grid-template-columns:1.35fr 1fr;
   gap:var(--gap);
   align-items:stretch;
 }
@@ -86,13 +87,13 @@ body{
   align-items:stretch;
 }
 
-.clock-card{padding:clamp(8px,1.4vh,14px) clamp(10px,1.4vw,16px);display:flex;flex-direction:column;justify-content:flex-end;gap:3px}
+.clock-card{padding:clamp(6px,1vh,10px) clamp(10px,1.4vw,16px);display:flex;flex-direction:column;justify-content:center;gap:2px}
 .clock-card.primary{background:var(--card)}
 .clock-card.primary::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
-.clock-flag{position:absolute;top:9px;right:11px;font-size:clamp(12px,1.6vw,16px);opacity:0.7}
-.clock-lbl{font-size:clamp(6px,0.65vw,8px);font-weight:700;letter-spacing:0.22em;color:var(--txt3);text-transform:uppercase;margin-bottom:2px}
-.clock-card.primary .clock-time{font-family:var(--serif);font-size:clamp(38px,5.2vw,76px);line-height:0.95;color:var(--txt);white-space:nowrap}
-.clock-card.secondary .clock-time{font-family:var(--serif);font-size:clamp(22px,3vw,42px);line-height:0.95;color:var(--txt);white-space:nowrap}
+.clock-flag{position:absolute;top:8px;right:10px;font-size:clamp(11px,1.4vw,14px);opacity:0.7}
+.clock-lbl{font-size:clamp(6px,0.65vw,8px);font-weight:700;letter-spacing:0.22em;color:var(--txt3);text-transform:uppercase;margin-bottom:1px}
+.clock-card.primary .clock-time{font-family:var(--serif);font-size:clamp(26px,8vh,44px);line-height:0.95;color:var(--txt);white-space:nowrap}
+.clock-card.secondary .clock-time{font-family:var(--serif);font-size:clamp(16px,4.6vh,26px);line-height:0.95;color:var(--txt);white-space:nowrap}
 .clock-colon{opacity:1}
 .clock-ampm{font-family:var(--body);font-weight:300;color:var(--txt3);vertical-align:middle;margin-left:2px}
 .clock-card.primary .clock-ampm{font-size:0.28em}
@@ -112,15 +113,15 @@ body{
 .weather-card{padding:0;display:flex;flex-direction:column;overflow:hidden;height:100%;}
 
 .wx-top{
-  padding:clamp(8px,1.2vh,12px) clamp(10px,1.6vw,16px);
+  padding:clamp(6px,1vh,10px) clamp(8px,1.2vw,14px);
   display:grid;grid-template-columns:auto 1fr auto;
-  gap:clamp(8px,1.4vw,14px);align-items:center;
+  gap:clamp(6px,1vw,10px);align-items:center;
   border-bottom:1px solid var(--border);
   flex-shrink:0;
 }
-.wx-icon-col{display:flex;flex-direction:column;align-items:center;gap:3px}
-.wx-icon{font-size:clamp(30px,3.8vw,44px);line-height:1}
-.wx-temp{font-family:var(--serif);font-size:clamp(36px,4.8vw,54px);color:var(--txt);line-height:1}
+.wx-icon-col{display:flex;flex-direction:column;align-items:center;gap:2px}
+.wx-icon{font-size:clamp(24px,6vh,34px);line-height:1}
+.wx-temp{font-family:var(--serif);font-size:clamp(28px,7vh,42px);color:var(--txt);line-height:1}
 .wx-desc{font-size:clamp(7px,0.75vw,9px);font-weight:700;letter-spacing:0.14em;color:var(--txt3);text-transform:uppercase;text-align:center;margin-top:1px}
 
 .wx-mid{display:flex;flex-direction:column;gap:4px;min-width:0}
